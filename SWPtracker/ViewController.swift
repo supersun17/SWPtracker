@@ -27,6 +27,17 @@ class ViewController: UIViewController {
 		super.viewDidAppear(animated)
 
 		recover()
+		NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+	}
+
+	@objc func willEnterForeground(_ notif: Notification) {
+		recover()
+	}
+
+	@objc func willResignActive(_ notif: Notification) {
+		timer?.invalidate()
+		timer = nil
 	}
 
 	func recover() {
@@ -83,11 +94,6 @@ class ViewController: UIViewController {
 		let maxHeight: CGFloat = barsStack.frame.height
 		let maxTime: TimeInterval = 8 * 3600
 		return maxHeight * CGFloat(time / maxTime)
-	}
-
-	deinit {
-		timer?.invalidate()
-		timer = nil
 	}
 }
 
