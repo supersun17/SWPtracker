@@ -46,9 +46,10 @@ class ViewController: UIViewController {
 	}
 
 	func renderStateToBars() {
-		playBarHeight.constant = convertTimeToHeight(state.caculatedPlay)
-		workBarHeight.constant = convertTimeToHeight(state.caculatedWork)
-		studyBarHeight.constant = convertTimeToHeight(state.caculatedStudy)
+		let timeArray = convertTimeToHeight()
+		playBarHeight.constant = timeArray[0]
+		workBarHeight.constant = timeArray[1]
+		studyBarHeight.constant = timeArray[2]
 
 		playBarLabel.text = "Play \n \(getStringForTimeInterval(state.caculatedPlay))"
 		workBarLabel.text = "Work \n \(getStringForTimeInterval(state.caculatedWork))"
@@ -90,10 +91,14 @@ class ViewController: UIViewController {
 		present(sheet, animated: true, completion: nil)
 	}
 
-	func convertTimeToHeight(_ time: TimeInterval) -> CGFloat {
+	func convertTimeToHeight() -> [CGFloat] {
+		let timeArray = [state.caculatedPlay,state.caculatedWork,state.caculatedStudy]
+		var maxTime: TimeInterval = 8 * 3600
+		for time in timeArray {
+			maxTime = max(maxTime,time)
+		}
 		let maxHeight: CGFloat = barsStack.frame.height
-		let maxTime: TimeInterval = 8 * 3600
-		return maxHeight * CGFloat(time / maxTime)
+		return timeArray.map { maxHeight * CGFloat($0 / maxTime) }
 	}
 }
 
