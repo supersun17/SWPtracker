@@ -13,6 +13,7 @@ public class TrackingRecord: NSManagedObject {
 	@NSManaged public var label: String?
 	@NSManaged public var start: Double
 	@NSManaged public var end: Double
+	@NSManaged public var trackingList: TrackingList?
 
 	@nonobjc public class func fetchRequest() -> NSFetchRequest<TrackingRecord> {
 		return NSFetchRequest<TrackingRecord>(entityName: "TrackingRecord")

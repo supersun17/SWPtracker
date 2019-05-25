@@ -58,7 +58,7 @@ extension TrackingController: UITableViewDelegate, UITableViewDataSource {
 			return cell
 		} else {
 			let cell = UITableViewCell.init(style: .default, reuseIdentifier: reusableCellIdentifier)
-			cell.backgroundColor = generateRandomColor()
+			cell.backgroundColor = getRanbowColors()[indexPath.row % 7]
 			return cell
 		}
 	}

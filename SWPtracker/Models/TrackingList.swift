@@ -81,7 +81,6 @@ public class TrackingList: NSManagedObject {
 		} else {
 			return cachedTimeFragmentsTotalLength.time
 		}
-
 	}
 
 	@objc(addRecordsObject:)
