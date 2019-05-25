@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		3AD3B2B122959DE900C1BB8D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3AD3B2B022959DE900C1BB8D /* README.md */; };
+		3AD3B2B32295D20700C1BB8D /* TrackingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD3B2B22295D20700C1BB8D /* TrackingList.swift */; };
+		3AD3B2B62295D4E100C1BB8D /* TrackingRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD3B2B52295D4E100C1BB8D /* TrackingRecord.swift */; };
+		3AD3B2BA2295D70900C1BB8D /* TrackingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD3B2B92295D70900C1BB8D /* TrackingTableViewController.swift */; };
+		3AD3B2E22295F57900C1BB8D /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3AD3B2E02295F57900C1BB8D /* DataModel.xcdatamodeld */; };
 		3AFB072F227F3DF100455E92 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB072E227F3DF100455E92 /* AppDelegate.swift */; };
 		3AFB0731227F3DF100455E92 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB0730227F3DF100455E92 /* ViewController.swift */; };
 		3AFB0734227F3DF100455E92 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AFB0732227F3DF100455E92 /* Main.storyboard */; };
@@ -30,6 +34,10 @@
 
 /* Begin PBXFileReference section */
 		3AD3B2B022959DE900C1BB8D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		3AD3B2B22295D20700C1BB8D /* TrackingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingList.swift; sourceTree = "<group>"; };
+		3AD3B2B52295D4E100C1BB8D /* TrackingRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingRecord.swift; sourceTree = "<group>"; };
+		3AD3B2B92295D70900C1BB8D /* TrackingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingTableViewController.swift; sourceTree = "<group>"; };
+		3AD3B2E12295F57900C1BB8D /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		3AFB072B227F3DF100455E92 /* SWPtracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SWPtracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AFB072E227F3DF100455E92 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3AFB0730227F3DF100455E92 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -62,6 +70,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3AD3B2B42295D22400C1BB8D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3AD3B2E02295F57900C1BB8D /* DataModel.xcdatamodeld */,
+				3AFB074E227F56DA00455E92 /* TrackingState.swift */,
+				3AD3B2B22295D20700C1BB8D /* TrackingList.swift */,
+				3AD3B2B52295D4E100C1BB8D /* TrackingRecord.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3AD3B2B72295D52A00C1BB8D /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				3AFB0730227F3DF100455E92 /* ViewController.swift */,
+				3AD3B2B92295D70900C1BB8D /* TrackingTableViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		3AD3B2B82295D54600C1BB8D /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				3AFB0750227F572B00455E92 /* Helpers.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		3AD3B2BB2295DFA900C1BB8D /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3AFB0732227F3DF100455E92 /* Main.storyboard */,
+				3AFB0737227F3DF300455E92 /* LaunchScreen.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		3AFB0722227F3DF100455E92 = {
 			isa = PBXGroup;
 			children = (
@@ -84,14 +129,13 @@
 		3AFB072D227F3DF100455E92 /* SWPtracker */ = {
 			isa = PBXGroup;
 			children = (
+				3AD3B2B82295D54600C1BB8D /* Util */,
+				3AD3B2B42295D22400C1BB8D /* Models */,
+				3AD3B2B72295D52A00C1BB8D /* Controllers */,
+				3AD3B2BB2295DFA900C1BB8D /* Views */,
 				3AFB072E227F3DF100455E92 /* AppDelegate.swift */,
-				3AFB0750227F572B00455E92 /* Helpers.swift */,
-				3AFB074E227F56DA00455E92 /* TrackingState.swift */,
-				3AFB0730227F3DF100455E92 /* ViewController.swift */,
-				3AFB0732227F3DF100455E92 /* Main.storyboard */,
-				3AFB0735227F3DF300455E92 /* Assets.xcassets */,
-				3AFB0737227F3DF300455E92 /* LaunchScreen.storyboard */,
 				3AFB073A227F3DF300455E92 /* Info.plist */,
+				3AFB0735227F3DF300455E92 /* Assets.xcassets */,
 			);
 			path = SWPtracker;
 			sourceTree = "<group>";
@@ -208,9 +252,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AFB0731227F3DF100455E92 /* ViewController.swift in Sources */,
+				3AD3B2E22295F57900C1BB8D /* DataModel.xcdatamodeld in Sources */,
+				3AD3B2BA2295D70900C1BB8D /* TrackingTableViewController.swift in Sources */,
+				3AD3B2B62295D4E100C1BB8D /* TrackingRecord.swift in Sources */,
 				3AFB074F227F56DA00455E92 /* TrackingState.swift in Sources */,
 				3AFB072F227F3DF100455E92 /* AppDelegate.swift in Sources */,
 				3AFB0751227F572B00455E92 /* Helpers.swift in Sources */,
+				3AD3B2B32295D20700C1BB8D /* TrackingList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -477,6 +525,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		3AD3B2E02295F57900C1BB8D /* DataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				3AD3B2E12295F57900C1BB8D /* DataModel.xcdatamodel */,
+			);
+			currentVersion = 3AD3B2E12295F57900C1BB8D /* DataModel.xcdatamodel */;
+			path = DataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 3AFB0723227F3DF100455E92 /* Project object */;
 }

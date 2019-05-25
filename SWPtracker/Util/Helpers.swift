@@ -6,7 +6,14 @@
 //  Copyright © 2019 Ming Sun. All rights reserved.
 //
 
-import Foundation
+import UIKit
+
+func generateRandomColor() -> UIColor {
+	let red = CGFloat(arc4random_uniform(1000)) / 1000
+	let green = CGFloat(arc4random_uniform(1000)) / 1000
+	let blue = CGFloat(arc4random_uniform(1000)) / 1000
+	return UIColor.init(red: red, green: green, blue: blue, alpha: 1)
+}
 
 func convertDateToTime(_ date: Date) -> TimeInterval {
 	return date.timeIntervalSince1970
