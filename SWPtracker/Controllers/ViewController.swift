@@ -178,15 +178,16 @@ extension ViewController {
 
 extension ViewController: TrackingControllerHelper {
 	func convertTimePeriodToHeight(_ timePeriod: TimeInterval) -> CGFloat {
-		let timeArray: [TimeInterval] = trackingTVCs.values.compactMap {
-			$0.trackingList.getTimeFragmentsTotalLength()
+		var tableViewHeight: CGFloat = 0
+		let timeArray: [TimeInterval] = trackingTVCs.values.map {
+			tableViewHeight = max(tableViewHeight,$0.tableView.frame.height)
+			return $0.trackingList.getTimeFragmentsTotalLength()
 		}
 		var maxTime: TimeInterval = 8 * 3600
 		for time in timeArray {
 			maxTime = max(maxTime,time)
 		}
-		let maxHeight: CGFloat = barsStack.frame.height
-		return maxHeight * CGFloat(timePeriod / maxTime)
+		return tableViewHeight * CGFloat(timePeriod / maxTime)
 	}
 
 	func addTracker(_ listName: String) {
