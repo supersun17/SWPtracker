@@ -146,6 +146,8 @@ extension ViewController {
 	}
 
 	func endTracking() {
+		pauseTracking()
+
 		if let listName = state.currentlyDoing, let newRecord = TrackingRecord.factory(with: "listName", state.startTime ?? 0.00, (state.startTime ?? 0.00) + getTrackedSpentTime()) {
 			trackingTVCs[listName]?.trackingList.addToRecords(newRecord)
 			renderStateToTracker(listName)
@@ -155,8 +157,6 @@ extension ViewController {
 		startButton.setTitle("Start", for: .normal)
 		currentDoingLabel.text = "None"
 		timeSpentLabel.text = "00:00"
-
-		pauseTracking()
 	}
 
 	func startUpdateTimeSpentLabel() {
