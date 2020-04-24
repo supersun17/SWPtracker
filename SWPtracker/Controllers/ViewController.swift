@@ -148,7 +148,8 @@ extension ViewController {
 	func endTracking() {
 		pauseTracking()
 
-		if let listName = state.currentlyDoing, let newRecord = TrackingRecord.factory(with: "listName", state.startTime ?? 0.00, (state.startTime ?? 0.00) + getTrackedSpentTime()) {
+		if let listName = state.currentlyDoing,
+           let newRecord = TrackingRecord.factory(with: "listName", state.startTime ?? 0.00, (state.startTime ?? 0.00) + getTrackedSpentTime()) {
 			trackingTVCs[listName]?.trackingList.addToRecords(newRecord)
 			renderStateToTracker(listName)
 		}
@@ -160,11 +161,12 @@ extension ViewController {
 	}
 
 	func startUpdateTimeSpentLabel() {
-		timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(updateTimeSpentLabel), userInfo: nil, repeats: true)
+		timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(updateTimeSpentUI), userInfo: nil, repeats: true)
 		timer?.fire()
 	}
 
-	@objc func updateTimeSpentLabel() {
+	@objc
+    func updateTimeSpentUI() {
 		let date = Date.init(timeIntervalSince1970: state.startTime ?? 0.00)
 		timeSpentLabel.text = getStringForElapsedTime(by: date)
 	}
