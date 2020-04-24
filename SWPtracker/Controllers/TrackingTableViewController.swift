@@ -19,6 +19,7 @@ class TrackingController: NSObject {
 	weak var tableView: UITableView!
 	weak var label: UILabel!
 	weak var helper: TrackingControllerHelper?
+    var dynamicTrackingTime: Double = 0.0
 
 	func setup(trackingList: TrackingList, tableView: UITableView, label: UILabel, helper: TrackingControllerHelper) {
 		self.trackingList = trackingList
@@ -41,16 +42,22 @@ class TrackingController: NSObject {
 
 extension TrackingController: UITableViewDelegate, UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return trackingList.getRecordsArray().count
+        let dynamicRow = dynamicTrackingTime > 0 ? 1 : 0
+		return trackingList.getRecordsArray().count + dynamicRow
 	}
 
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		let record = trackingList.getRecordsArray()[indexPath.row]
-		if let height = helper?.convertTimePeriodToHeight(record.end - record.start) {
-			return height
-		} else {
-			return tableView.estimatedRowHeight
-		}
+        if indexPath.row < trackingList.getRecordsArray().count {
+            let record = trackingList.getRecordsArray()[indexPath.row]
+            if let height = helper?.convertTimePeriodToHeight(record.end - record.start) {
+                return height
+            }
+        } else {
+            if let height = helper?.convertTimePeriodToHeight(dynamicTrackingTime) {
+                return height
+            }
+        }
+        return tableView.estimatedRowHeight
 	}
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

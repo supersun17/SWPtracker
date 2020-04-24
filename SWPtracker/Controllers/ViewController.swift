@@ -22,6 +22,7 @@ class ViewController: UIViewController {
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
 
+        view.backgroundColor = .systemBackground
 		recover()
 		NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIApplication.willResignActiveNotification, object: nil)
@@ -36,11 +37,11 @@ class ViewController: UIViewController {
 	}
 
 	func recover() {
-		resumeTracking()
 		let allList = TrackingList.fetchAllList()
 		for list in allList {
 			constructTracker(list)
 		}
+        resumeTracking()
 		renderStateToTracker()
 	}
 
@@ -136,6 +137,9 @@ extension ViewController {
 		if state.isTracking {
 			currentDoingLabel.text = state.currentlyDoing
 			startButton.setTitle("End", for: .normal)
+            if let listName = state.currentlyDoing {
+                trackingTVCs[listName]?.dynamicTrackingTime = getTrackedSpentTime()
+            }
 			startUpdateTimeSpentLabel()
 		}
 	}
@@ -151,6 +155,7 @@ extension ViewController {
 		if let listName = state.currentlyDoing,
            let newRecord = TrackingRecord.factory(with: "listName", state.startTime ?? 0.00, (state.startTime ?? 0.00) + getTrackedSpentTime()) {
 			trackingTVCs[listName]?.trackingList.addToRecords(newRecord)
+            trackingTVCs[listName]?.dynamicTrackingTime = 0
 			renderStateToTracker(listName)
 		}
 		state.currentlyDoing = nil
@@ -169,6 +174,11 @@ extension ViewController {
     func updateTimeSpentUI() {
 		let date = Date.init(timeIntervalSince1970: state.startTime ?? 0.00)
 		timeSpentLabel.text = getStringForElapsedTime(by: date)
+
+        if let listName = state.currentlyDoing {
+            trackingTVCs[listName]?.dynamicTrackingTime = getTrackedSpentTime()
+            renderStateToTracker(listName)
+        }
 	}
 
 	func getTrackedSpentTime() -> TimeInterval {
@@ -204,7 +214,7 @@ extension ViewController: TrackingControllerHelper {
 
 		let tableView = UITableView()
 		tableView.separatorInset = UIEdgeInsets.zero
-		tableView.backgroundColor = .groupTableViewBackground
+		tableView.backgroundColor = .secondarySystemBackground
 		tableView.transform = CGAffineTransform.init(rotationAngle: CGFloat.pi)
 
 		let labelView = UILabel()
