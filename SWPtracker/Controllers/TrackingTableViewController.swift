@@ -36,7 +36,8 @@ class TrackingController: NSObject {
 	func reloadData() {
 		tableView?.reloadData()
 
-		label.text = "\(trackingList.listName!)\n\(getStringForTimeInterval(trackingList.getTimeFragmentsTotalLength()))"
+        let totalTime = trackingList.getTimeFragmentsTotalLength() + dynamicTrackingTime
+		label.text = "\(trackingList.listName!)\n\(getStringForTimeInterval(totalTime))"
 	}
 }
 
