@@ -17,13 +17,25 @@ func generateRandomColor() -> UIColor {
 
 func getRanbowColors() -> [UIColor] {
 	return [
-		UIColor.init(hexString: "#FF0000"),
-		UIColor.init(hexString: "#FF7F00"),
-		UIColor.init(hexString: "#FFFF00"),
-		UIColor.init(hexString: "#00FF00"),
-		UIColor.init(hexString: "#0000FF"),
-		UIColor.init(hexString: "#4B0082"),
-		UIColor.init(hexString: "#8B00FF")
+		UIColor.init(hexString: "#fb131b"),
+		UIColor.init(hexString: "#fb5713"),
+		UIColor.init(hexString: "#fba213"),
+		UIColor.init(hexString: "#fbdb13"),
+		UIColor.init(hexString: "#f3fb13"),
+		UIColor.init(hexString: "#c7fb13"),
+		UIColor.init(hexString: "#91fb13"),
+        UIColor.init(hexString: "#13fb18"),
+        UIColor.init(hexString: "#13fbbd"),
+        UIColor.init(hexString: "#13fbf9"),
+        UIColor.init(hexString: "#13d1fb"),
+        UIColor.init(hexString: "#13a6fb"),
+        UIColor.init(hexString: "#1375fb"),
+        UIColor.init(hexString: "#1320fb"),
+        UIColor.init(hexString: "#5413fb"),
+        UIColor.init(hexString: "#9a13fb"),
+        UIColor.init(hexString: "#cf13fb"),
+        UIColor.init(hexString: "#fb13e8"),
+        UIColor.init(hexString: "#fb13a2")
 	]
 }
 
@@ -32,9 +44,9 @@ extension UIColor {
 	/// Not moved values to constant as it would be difficult to name them
 	convenience init(hexString: String) {
 		let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-		var int = UInt32()
-		Scanner(string: hex).scanHexInt32(&int)
-		let a, r, g, b: UInt32
+		var int = UInt64()
+        Scanner(string: hex).scanHexInt64(&int)
+		let a, r, g, b: UInt64
 		switch hex.count {
 		case 3: // RGB (12-bit)
 			(a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)

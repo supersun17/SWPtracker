@@ -62,12 +62,8 @@ extension TrackingController: UITableViewDelegate, UITableViewDataSource {
 	}
 
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		if let cell = tableView.dequeueReusableCell(withIdentifier: reusableCellIdentifier) {
-			return cell
-		} else {
-			let cell = UITableViewCell.init(style: .default, reuseIdentifier: reusableCellIdentifier)
-			cell.backgroundColor = getRanbowColors()[indexPath.row % 7]
-			return cell
-		}
+        let cell = UITableViewCell.init(style: .default, reuseIdentifier: reusableCellIdentifier)
+        cell.backgroundColor = getRanbowColors()[indexPath.row % getRanbowColors().count]
+        return cell
 	}
 }
