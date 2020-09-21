@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+// TODO: rework, stop using storyboard
 class ViewController: UIViewController {
 	@IBOutlet weak var currentDoingLabel: UILabel!
 	@IBOutlet weak var timeSpentLabel: UILabel!
