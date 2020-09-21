@@ -6,9 +6,7 @@ name: GA Testing
 # events but only for the master branch
 on:
   push:
-    branches: [ GA-testing, 'GA-testing', "GA-testing" ]
-  pull_request:
-    branches: [ GA-testing, 'GA-testing', "GA-testing" ]
+    branches: [ 'GA-testing' ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -16,8 +14,6 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # if: $GITHUB_REF != 'refs/heads/phrase-translations' { return }
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -33,4 +29,3 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          echo $GITHUB_REF
