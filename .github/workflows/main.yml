@@ -6,7 +6,9 @@ name: GA Testing
 # events but only for the master branch
 on:
   push:
-    branches: [ 'GA-testing' ]
+    branches: [ 'GA-Push' ]
+  pull_request:
+    branches: [ 'GA-PR' ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
