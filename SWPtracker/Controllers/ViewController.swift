@@ -8,22 +8,32 @@
 
 import UIKit
 
-// TODO: remove storyboard
-class ViewController: UIViewController {
-	@IBOutlet weak var currentDoingLabel: UILabel!
-	@IBOutlet weak var timeSpentLabel: UILabel!
-	@IBOutlet weak var startButton: UIButton!
-	@IBOutlet weak var barsStack: UIStackView!
+class MainViewController: UIViewController {
 
+    var contentView: MainView { view as! MainView }
+
+    var currentDoingLabel: UILabel { contentView.currentlyDoing }
+    var timeSpentLabel: UILabel { contentView.timeSpent }
+    var barsStack: UIStackView { contentView.barStack }
+    var resetBtn: UIButton { contentView.resetBtn }
+    var startBtn: UIButton { contentView.startBtn }
+    var addBtn: UIButton { contentView.addBtn }
 	var trackingTVCs: [String:TrackingController] = [:]
 
 	var timer: Timer?
 	let state = TrackingState()
 
+    override func loadView() {
+        view = MainView()
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupActions()
+    }
+
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-
-        view.backgroundColor = .systemBackground
 		recover()
 		NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIApplication.willResignActiveNotification, object: nil)
@@ -36,6 +46,16 @@ class ViewController: UIViewController {
 	@objc func willResignActive(_ notif: Notification) {
 		pauseTracking()
 	}
+}
+
+
+extension MainViewController {
+
+    func setupActions() {
+        resetBtn.addTarget(self, action: #selector(handleResetTap), for: .touchUpInside)
+        startBtn.addTarget(self, action: #selector(handleStartTap), for: .touchUpInside)
+        addBtn.addTarget(self, action: #selector(handleAddTap), for: .touchUpInside)
+    }
 
 	func recover() {
 		let allList = TrackingList.fetchAllList()
@@ -56,7 +76,8 @@ class ViewController: UIViewController {
 		}
 	}
 
-	@IBAction func startButton(_ sender: UIButton) {
+	@objc
+    func handleStartTap(_ sender: UIButton) {
 		if state.isTracking {
 			endTracking()
 		} else {
@@ -64,12 +85,14 @@ class ViewController: UIViewController {
 		}
 	}
 
-	@IBAction func resetButton(_ sender: UIButton) {
+	@objc
+    func handleResetTap(_ sender: UIButton) {
 		reset()
 		renderStateToTracker()
 	}
 
-	@IBAction func addButton(_ sender: UIButton) {
+	@objc
+    func handleAddTap(_ sender: UIButton) {
 		popTrackerCreation()
 	}
 
@@ -126,7 +149,7 @@ class ViewController: UIViewController {
 	}
 }
 
-extension ViewController {
+extension MainViewController {
 	func startTracking(_ listName: String) {
 		state.currentlyDoing = listName
 		state.startTime = convertDateToTime(Date())
@@ -137,7 +160,7 @@ extension ViewController {
 	func resumeTracking() {
 		if state.isTracking {
 			currentDoingLabel.text = state.currentlyDoing
-			startButton.setTitle("End", for: .normal)
+			startBtn.setTitle("End", for: .normal)
             if let listName = state.currentlyDoing {
                 trackingTVCs[listName]?.dynamicTrackingTime = getTrackedSpentTime()
             }
@@ -161,7 +184,7 @@ extension ViewController {
 		}
 		state.currentlyDoing = nil
 		state.startTime = nil
-		startButton.setTitle("Start", for: .normal)
+		startBtn.setTitle("Start", for: .normal)
 		currentDoingLabel.text = "None"
 		timeSpentLabel.text = "00:00"
 	}
@@ -189,7 +212,7 @@ extension ViewController {
 	}
 }
 
-extension ViewController: TrackingControllerHelper {
+extension MainViewController: TrackingControllerHelper {
 	func convertTimePeriodToHeight(_ timePeriod: TimeInterval) -> CGFloat {
 		var tableViewHeight: CGFloat = 0
 		let timeArray: [TimeInterval] = trackingTVCs.values.map {

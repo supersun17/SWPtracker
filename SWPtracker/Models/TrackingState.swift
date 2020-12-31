@@ -17,12 +17,12 @@ class TrackingState {
 		}
 	}
 
-	var currentlyDoing: String? {
+	var trackingListName: String? {
 		get {
-			return UserDefaults.standard.value(forKey: "currentlyDoing") as? String
+			return UserDefaults.standard.value(forKey: "trackingListName") as? String
 		}
 		set {
-			UserDefaults.standard.set(newValue, forKey: "currentlyDoing")
+			UserDefaults.standard.set(newValue, forKey: "trackingListName")
 		}
 	}
 	
@@ -34,5 +34,15 @@ class TrackingState {
 			UserDefaults.standard.set(newValue, forKey: "startTime")
 		}
 	}
+
+    func start(trackingListName tln: String) {
+        trackingListName = tln
+        startTime = Date().timeIntervalSince1970
+    }
+
+    func clear() {
+        trackingListName = nil
+        startTime = nil
+    }
 }
 

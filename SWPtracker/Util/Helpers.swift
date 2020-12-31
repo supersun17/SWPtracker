@@ -7,36 +7,38 @@
 //
 
 import UIKit
+import CoreData
+
+
+var cdContext: NSManagedObjectContext { (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext }
+
+let ranbowColors = [
+    UIColor.init(hexString: "#fb131b"),
+    UIColor.init(hexString: "#fb5713"),
+    UIColor.init(hexString: "#fba213"),
+    UIColor.init(hexString: "#fbdb13"),
+    UIColor.init(hexString: "#f3fb13"),
+    UIColor.init(hexString: "#c7fb13"),
+    UIColor.init(hexString: "#91fb13"),
+    UIColor.init(hexString: "#13fb18"),
+    UIColor.init(hexString: "#13fbbd"),
+    UIColor.init(hexString: "#13fbf9"),
+    UIColor.init(hexString: "#13d1fb"),
+    UIColor.init(hexString: "#13a6fb"),
+    UIColor.init(hexString: "#1375fb"),
+    UIColor.init(hexString: "#1320fb"),
+    UIColor.init(hexString: "#5413fb"),
+    UIColor.init(hexString: "#9a13fb"),
+    UIColor.init(hexString: "#cf13fb"),
+    UIColor.init(hexString: "#fb13e8"),
+    UIColor.init(hexString: "#fb13a2")
+]
 
 func generateRandomColor() -> UIColor {
 	let red = CGFloat(arc4random_uniform(1000)) / 1000
 	let green = CGFloat(arc4random_uniform(1000)) / 1000
 	let blue = CGFloat(arc4random_uniform(1000)) / 1000
 	return UIColor.init(red: red, green: green, blue: blue, alpha: 1)
-}
-
-func getRanbowColors() -> [UIColor] {
-	return [
-		UIColor.init(hexString: "#fb131b"),
-		UIColor.init(hexString: "#fb5713"),
-		UIColor.init(hexString: "#fba213"),
-		UIColor.init(hexString: "#fbdb13"),
-		UIColor.init(hexString: "#f3fb13"),
-		UIColor.init(hexString: "#c7fb13"),
-		UIColor.init(hexString: "#91fb13"),
-        UIColor.init(hexString: "#13fb18"),
-        UIColor.init(hexString: "#13fbbd"),
-        UIColor.init(hexString: "#13fbf9"),
-        UIColor.init(hexString: "#13d1fb"),
-        UIColor.init(hexString: "#13a6fb"),
-        UIColor.init(hexString: "#1375fb"),
-        UIColor.init(hexString: "#1320fb"),
-        UIColor.init(hexString: "#5413fb"),
-        UIColor.init(hexString: "#9a13fb"),
-        UIColor.init(hexString: "#cf13fb"),
-        UIColor.init(hexString: "#fb13e8"),
-        UIColor.init(hexString: "#fb13a2")
-	]
 }
 
 extension UIColor {
@@ -61,25 +63,13 @@ extension UIColor {
 	}
 }
 
-func convertDateToTime(_ date: Date) -> TimeInterval {
-	return date.timeIntervalSince1970
-}
-
 func getString(from date: Date) -> String {
 	let fmt = DateFormatter()
 	fmt.dateFormat = "HH:mm"
 	return fmt.string(from: date)
 }
 
-func getStringForElapsedTime(by date: Date) -> String {
-	let now = Date()
-	let secondsPast = now.timeIntervalSince(date)
-	let hours = Int(secondsPast / 3600)
-	let minutes = Int((secondsPast - 3600 * TimeInterval(hours)) / 60)
-	return String.init(format: "%02d:%02d", hours, minutes)
-}
-
-func getStringForTimeInterval(_ time: TimeInterval) -> String {
+func gethhmmStringFromTimeInterval(_ time: TimeInterval) -> String {
 	let secondsPast = time
 	let hours = Int(secondsPast / 3600)
 	let minutes = Int((secondsPast - 3600 * TimeInterval(hours)) / 60)

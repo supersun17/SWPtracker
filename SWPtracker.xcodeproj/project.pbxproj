@@ -10,16 +10,16 @@
 		3AD3B2B122959DE900C1BB8D /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 3AD3B2B022959DE900C1BB8D /* README.md */; };
 		3AD3B2B32295D20700C1BB8D /* TrackingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD3B2B22295D20700C1BB8D /* TrackingList.swift */; };
 		3AD3B2B62295D4E100C1BB8D /* TrackingRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD3B2B52295D4E100C1BB8D /* TrackingRecord.swift */; };
-		3AD3B2BA2295D70900C1BB8D /* TrackingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD3B2B92295D70900C1BB8D /* TrackingTableViewController.swift */; };
+		3AD3B2BA2295D70900C1BB8D /* TrackingBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AD3B2B92295D70900C1BB8D /* TrackingBar.swift */; };
 		3AD3B2E22295F57900C1BB8D /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3AD3B2E02295F57900C1BB8D /* DataModel.xcdatamodeld */; };
 		3AFB072F227F3DF100455E92 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB072E227F3DF100455E92 /* AppDelegate.swift */; };
-		3AFB0731227F3DF100455E92 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB0730227F3DF100455E92 /* ViewController.swift */; };
-		3AFB0734227F3DF100455E92 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AFB0732227F3DF100455E92 /* Main.storyboard */; };
+		3AFB0731227F3DF100455E92 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB0730227F3DF100455E92 /* MainViewController.swift */; };
 		3AFB0736227F3DF300455E92 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AFB0735227F3DF300455E92 /* Assets.xcassets */; };
 		3AFB0739227F3DF300455E92 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AFB0737227F3DF300455E92 /* LaunchScreen.storyboard */; };
 		3AFB0744227F3DF300455E92 /* SWPtrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB0743227F3DF300455E92 /* SWPtrackerTests.swift */; };
 		3AFB074F227F56DA00455E92 /* TrackingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB074E227F56DA00455E92 /* TrackingState.swift */; };
 		3AFB0751227F572B00455E92 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB0750227F572B00455E92 /* Helpers.swift */; };
+		82AA1482254ABB3800280B41 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AA1481254ABB3800280B41 /* MainView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,12 +36,11 @@
 		3AD3B2B022959DE900C1BB8D /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3AD3B2B22295D20700C1BB8D /* TrackingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingList.swift; sourceTree = "<group>"; };
 		3AD3B2B52295D4E100C1BB8D /* TrackingRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingRecord.swift; sourceTree = "<group>"; };
-		3AD3B2B92295D70900C1BB8D /* TrackingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingTableViewController.swift; sourceTree = "<group>"; };
+		3AD3B2B92295D70900C1BB8D /* TrackingBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingBar.swift; sourceTree = "<group>"; };
 		3AD3B2E12295F57900C1BB8D /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		3AFB072B227F3DF100455E92 /* SWPtracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SWPtracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AFB072E227F3DF100455E92 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3AFB0730227F3DF100455E92 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		3AFB0733227F3DF100455E92 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		3AFB0730227F3DF100455E92 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		3AFB0735227F3DF300455E92 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3AFB0738227F3DF300455E92 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3AFB073A227F3DF300455E92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -50,6 +49,7 @@
 		3AFB0745227F3DF300455E92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3AFB074E227F56DA00455E92 /* TrackingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingState.swift; sourceTree = "<group>"; };
 		3AFB0750227F572B00455E92 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		82AA1481254ABB3800280B41 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,8 +84,7 @@
 		3AD3B2B72295D52A00C1BB8D /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				3AFB0730227F3DF100455E92 /* ViewController.swift */,
-				3AD3B2B92295D70900C1BB8D /* TrackingTableViewController.swift */,
+				3AFB0730227F3DF100455E92 /* MainViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -101,8 +100,8 @@
 		3AD3B2BB2295DFA900C1BB8D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				3AFB0732227F3DF100455E92 /* Main.storyboard */,
-				3AFB0737227F3DF300455E92 /* LaunchScreen.storyboard */,
+				3AD3B2B92295D70900C1BB8D /* TrackingBar.swift */,
+				82AA1481254ABB3800280B41 /* MainView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -133,8 +132,7 @@
 				3AD3B2B42295D22400C1BB8D /* Models */,
 				3AD3B2B72295D52A00C1BB8D /* Controllers */,
 				3AD3B2BB2295DFA900C1BB8D /* Views */,
-				3AFB072E227F3DF100455E92 /* AppDelegate.swift */,
-				3AFB073A227F3DF300455E92 /* Info.plist */,
+				82345240254BB3720056F097 /* Startup */,
 				3AFB0735227F3DF300455E92 /* Assets.xcassets */,
 			);
 			path = SWPtracker;
@@ -147,6 +145,16 @@
 				3AFB0745227F3DF300455E92 /* Info.plist */,
 			);
 			path = SWPtrackerTests;
+			sourceTree = "<group>";
+		};
+		82345240254BB3720056F097 /* Startup */ = {
+			isa = PBXGroup;
+			children = (
+				3AFB072E227F3DF100455E92 /* AppDelegate.swift */,
+				3AFB073A227F3DF300455E92 /* Info.plist */,
+				3AFB0737227F3DF300455E92 /* LaunchScreen.storyboard */,
+			);
+			path = Startup;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,7 +241,6 @@
 				3AFB0739227F3DF300455E92 /* LaunchScreen.storyboard in Resources */,
 				3AFB0736227F3DF300455E92 /* Assets.xcassets in Resources */,
 				3AD3B2B122959DE900C1BB8D /* README.md in Resources */,
-				3AFB0734227F3DF100455E92 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,9 +258,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3AFB0731227F3DF100455E92 /* ViewController.swift in Sources */,
+				3AFB0731227F3DF100455E92 /* MainViewController.swift in Sources */,
+				82AA1482254ABB3800280B41 /* MainView.swift in Sources */,
 				3AD3B2E22295F57900C1BB8D /* DataModel.xcdatamodeld in Sources */,
-				3AD3B2BA2295D70900C1BB8D /* TrackingTableViewController.swift in Sources */,
+				3AD3B2BA2295D70900C1BB8D /* TrackingBar.swift in Sources */,
 				3AD3B2B62295D4E100C1BB8D /* TrackingRecord.swift in Sources */,
 				3AFB074F227F56DA00455E92 /* TrackingState.swift in Sources */,
 				3AFB072F227F3DF100455E92 /* AppDelegate.swift in Sources */,
@@ -281,14 +289,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		3AFB0732227F3DF100455E92 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3AFB0733227F3DF100455E92 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		3AFB0737227F3DF300455E92 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -421,8 +421,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = VS7LM5WTUA;
-				INFOPLIST_FILE = SWPtracker/Info.plist;
+				DEVELOPMENT_TEAM = RV56STKFC9;
+				INFOPLIST_FILE = SWPtracker/Startup/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -440,8 +440,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = VS7LM5WTUA;
-				INFOPLIST_FILE = SWPtracker/Info.plist;
+				DEVELOPMENT_TEAM = RV56STKFC9;
+				INFOPLIST_FILE = SWPtracker/Startup/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
