@@ -39,7 +39,7 @@ class MainView: UIView {
     }()
     private(set) var resetBtn: UIButton = {
         let b = UIButton(type: .system)
-        b.setTitle("Reset", for: .normal)
+        b.setTitle("RESET", for: .normal)
         b.setTitleColor(#colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1), for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
@@ -47,7 +47,7 @@ class MainView: UIView {
     private(set) var startBtn: UIButton = {
         let b = UIButton(type: .system)
         b.layer.cornerRadius = 40.0
-        b.setTitle("Start", for: .normal)
+        b.setTitle("START", for: .normal)
         b.setTitleColor(.white, for: .normal)
         b.setTitleColor(.gray, for: .disabled)
         b.isEnabled = false
@@ -56,7 +56,7 @@ class MainView: UIView {
     }()
     private(set) var addBtn: UIButton = {
         let b = UIButton(type: .system)
-        b.setTitle("Add", for: .normal)
+        b.setTitle("ADD", for: .normal)
         b.setTitleColor(#colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1), for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
@@ -80,13 +80,13 @@ class MainView: UIView {
 
     func updateUI(mmssString: String?, trackingListName tln: String? = nil) {
         if let hhmmString = mmssString {
-            startBtn.setTitle("End", for: .normal)
+            startBtn.setTitle("END", for: .normal)
             timeSpent.text = hhmmString
             if let tln = tln {
                 trackingListName.text = tln
             }
         } else {
-            startBtn.setTitle("Start", for: .normal)
+            startBtn.setTitle("START", for: .normal)
             timeSpent.text = "00:00"
             trackingListName.text = "NONE"
         }
