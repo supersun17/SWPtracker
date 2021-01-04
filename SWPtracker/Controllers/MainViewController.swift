@@ -81,8 +81,7 @@ extension MainViewController {
 
 	func presentStartTrackingAlert() {
 		let sheet = UIAlertController()
-        for tbc in tbcDict.values.reversed() {
-            let listName = tbc.trackingList.listName ?? ""
+        for listName in tbcDict.keys {
             let action = UIAlertAction(title: listName, style: .default) { [weak self] (_) in
                 self?.startTracking(listName)
             }
@@ -94,12 +93,12 @@ extension MainViewController {
 	}
 
 	func presentCreateNewTrackerAlert() {
-		let alertController = UIAlertController.init(title: "Create a new tracker", message: "Give it a name", preferredStyle: .alert)
+		let alertController = UIAlertController(title: "Create a new tracker", message: "Give it a name", preferredStyle: .alert)
 		alertController.addTextField {
             $0.autocapitalizationType = .allCharacters
             $0.placeholder = "Name of the tracker"
         }
-		let confirm = UIAlertAction.init(title: "OK", style: .default) { [weak self] (action) in
+		let confirm = UIAlertAction(title: "OK", style: .default) { [weak self] (action) in
 			if let newListName = alertController.textFields?.first?.text,
                !newListName.isEmpty {
                 guard let trackingList = TrackingList.factory(with: newListName) else { return }
@@ -109,7 +108,7 @@ extension MainViewController {
 				self?.presentError("Invalid tracker name")
 			}
 		}
-		let cancel = UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil)
+		let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 		for action in [cancel,confirm] {
 			alertController.addAction(action)
 		}
@@ -118,7 +117,7 @@ extension MainViewController {
 	}
 
 	func presentError(_ message: String) {
-		let alertController = UIAlertController.init(title: "Error occurred", message: message, preferredStyle: .alert)
+		let alertController = UIAlertController(title: "Error occurred", message: message, preferredStyle: .alert)
 		self.present(alertController, animated: true, completion: nil)
 	}
 }

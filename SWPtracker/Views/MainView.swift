@@ -48,6 +48,8 @@ class MainView: UIView {
         let b = UIButton(type: .system)
         b.layer.cornerRadius = 40.0
         b.setTitle("Start", for: .normal)
+        b.setTitleColor(.white, for: .normal)
+        b.setTitleColor(.gray, for: .disabled)
         b.isEnabled = false
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
@@ -59,7 +61,6 @@ class MainView: UIView {
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()
-    var trackingBars: [TrackingBar] { barStack.arrangedSubviews.map { $0 as? TrackingBar }.compactMap { $0 } }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -74,6 +75,7 @@ class MainView: UIView {
 
     func enableStart(_ enable: Bool) {
         startBtn.isEnabled = enable
+        startBtn.backgroundColor = enable ? .systemBlue : .white
     }
 
     func updateUI(mmssString: String?, trackingListName tln: String? = nil) {

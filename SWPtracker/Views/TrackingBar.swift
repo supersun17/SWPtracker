@@ -17,7 +17,7 @@ class TrackingBar: UIView {
         tbv.allowsSelection = false
         tbv.separatorInset = UIEdgeInsets.zero
         tbv.backgroundColor = .secondarySystemBackground
-        tbv.transform = CGAffineTransform.init(rotationAngle: CGFloat.pi)
+        tbv.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
         tbv.translatesAutoresizingMaskIntoConstraints = false
         return tbv
     }()
