@@ -24,6 +24,7 @@ class MainView: UIView {
         let l = UILabel()
         l.textAlignment = .center
         l.text = "00:00"
+        l.textColor = .black
         l.font = UIFont.systemFont(ofSize: 60.0, weight: UIFont.Weight(rawValue: 600))
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
