@@ -11,16 +11,16 @@ import UIKit
 
 
 class MainView: UIView {
-    private(set) var trackingListName: UILabel = {
+    private var trackingListName: UILabel = {
         let l = UILabel()
         l.textAlignment = .center
-        l.text = "None"
+        l.text = "NONE"
         l.textColor = #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1)
         l.font = UIFont.systemFont(ofSize: 20.0, weight: UIFont.Weight(rawValue: 500))
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
-    private(set) var timeSpent: UILabel = {
+    private var timeSpent: UILabel = {
         let l = UILabel()
         l.textAlignment = .center
         l.text = "00:00"
@@ -38,22 +38,22 @@ class MainView: UIView {
         return s
     }()
     private(set) var resetBtn: UIButton = {
-        let b = UIButton()
+        let b = UIButton(type: .system)
         b.setTitle("Reset", for: .normal)
         b.setTitleColor(#colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1), for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()
     private(set) var startBtn: UIButton = {
-        let b = UIButton()
+        let b = UIButton(type: .system)
+        b.layer.cornerRadius = 40.0
         b.setTitle("Start", for: .normal)
-        b.setTitleColor(.white, for: .normal)
-        b.backgroundColor = #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1)
+        b.isEnabled = false
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()
     private(set) var addBtn: UIButton = {
-        let b = UIButton()
+        let b = UIButton(type: .system)
         b.setTitle("Add", for: .normal)
         b.setTitleColor(#colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1), for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -72,8 +72,12 @@ class MainView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func updateUI(hhmmString: String?, trackingListName tln: String? = nil) {
-        if let hhmmString = hhmmString {
+    func enableStart(_ enable: Bool) {
+        startBtn.isEnabled = enable
+    }
+
+    func updateUI(mmssString: String?, trackingListName tln: String? = nil) {
+        if let hhmmString = mmssString {
             startBtn.setTitle("End", for: .normal)
             timeSpent.text = hhmmString
             if let tln = tln {
@@ -82,22 +86,13 @@ class MainView: UIView {
         } else {
             startBtn.setTitle("Start", for: .normal)
             timeSpent.text = "00:00"
-            trackingListName.text = "None"
+            trackingListName.text = "NONE"
         }
     }
 
     func addTrackingBar(trackingBar: TrackingBar) {
         barStack.addArrangedSubview(trackingBar)
     }
-
-    func trackingBar(withTrackingListName listName: String) -> TrackingBar? {
-        return trackingBars.first { $0.trackingList.listName == listName }
-    }
-
-    func reloadTrackingBars() {
-        trackingBars.forEach { $0.reloadData() }
-    }
-
 }
 
 

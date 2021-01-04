@@ -34,13 +34,6 @@ let ranbowColors = [
     UIColor.init(hexString: "#fb13a2")
 ]
 
-func generateRandomColor() -> UIColor {
-	let red = CGFloat(arc4random_uniform(1000)) / 1000
-	let green = CGFloat(arc4random_uniform(1000)) / 1000
-	let blue = CGFloat(arc4random_uniform(1000)) / 1000
-	return UIColor.init(red: red, green: green, blue: blue, alpha: 1)
-}
-
 extension UIColor {
 	//// Copied as it is from Stack link
 	/// Not moved values to constant as it would be difficult to name them
@@ -63,15 +56,16 @@ extension UIColor {
 	}
 }
 
-func getString(from date: Date) -> String {
-	let fmt = DateFormatter()
-	fmt.dateFormat = "HH:mm"
-	return fmt.string(from: date)
-}
-
-func gethhmmStringFromTimeInterval(_ time: TimeInterval) -> String {
+func toHHMM(_ time: TimeInterval) -> String {
 	let secondsPast = time
 	let hours = Int(secondsPast / 3600)
 	let minutes = Int((secondsPast - 3600 * TimeInterval(hours)) / 60)
 	return String.init(format: "%02d:%02d", hours, minutes)
+}
+
+func toMMSS(_ time: TimeInterval) -> String {
+    let secondsPast = time
+    let minutes = Int(secondsPast / 60)
+    let seconds = Int(secondsPast - 60 * TimeInterval(minutes))
+    return String.init(format: "%02d:%02d", minutes, seconds)
 }

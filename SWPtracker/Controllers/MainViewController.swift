@@ -13,6 +13,9 @@ class MainViewController: UIViewController {
 
 	private var timer: Timer?
 	private let state = TrackingState()
+    private var tbcDict: [String: TrackingBarController] = [:]
+    private let refreshInterval: TimeInterval = 1
+    private let timePeriodCap: TimeInterval = 2.0 * 3600.0
 
     override func loadView() {
         view = MainView()
@@ -31,12 +34,21 @@ class MainViewController: UIViewController {
 	}
 
 	@objc func willEnterForeground(_ notif: Notification) {
-		resumeTracking()
+		resumeTrackingIfNeeded()
 	}
 
 	@objc func willResignActive(_ notif: Notification) {
 		endTrackingTimer()
 	}
+
+    func recover() {
+        let allList = TrackingList.fetchAllList()
+        for trackingList in allList {
+            addTrackerBarController(trackingList)
+        }
+        contentView.enableStart(!tbcDict.keys.isEmpty)
+        resumeTrackingIfNeeded()
+    }
 }
 
 
@@ -48,72 +60,53 @@ extension MainViewController {
         contentView.addBtn.addTarget(self, action: #selector(handleAddTap), for: .touchUpInside)
     }
 
-	func recover() {
-		let allList = TrackingList.fetchAllList()
-		for trackingList in allList {
-            constructTracker(trackingList)
-		}
-        resumeTracking()
-        contentView.reloadTrackingBars()
-	}
-
 	@objc
     func handleStartTap(_ sender: UIButton) {
 		if state.isTracking {
 			endTracking()
 		} else {
-			popStartTracking()
+			presentStartTrackingAlert()
 		}
 	}
 
 	@objc
     func handleResetTap(_ sender: UIButton) {
-		reset()
-        contentView.reloadTrackingBars()
+        resetTracking()
 	}
 
 	@objc
     func handleAddTap(_ sender: UIButton) {
-		popTrackerCreation()
+		presentCreateNewTrackerAlert()
 	}
 
-	func reset() {
-        for trackingBar in contentView.trackingBars {
-			if let records = trackingBar.trackingList.records {
-                trackingBar.trackingList.removeFromRecords(records)
-			}
-		}
-		state.clear()
-	}
-
-	func popStartTracking() {
-		guard !contentView.trackingBars.isEmpty else { return }
+	func presentStartTrackingAlert() {
 		let sheet = UIAlertController()
-		for trackingBar in contentView.trackingBars {
-            let listName = trackingBar.trackingList.listName ?? ""
+        for tbc in tbcDict.values.reversed() {
+            let listName = tbc.trackingList.listName ?? ""
             let action = UIAlertAction(title: listName, style: .default) { [weak self] (_) in
                 self?.startTracking(listName)
             }
             sheet.addAction(action)
 		}
-
 		let action = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
 		sheet.addAction(action)
 		present(sheet, animated: true, completion: nil)
 	}
 
-	func popTrackerCreation() {
+	func presentCreateNewTrackerAlert() {
 		let alertController = UIAlertController.init(title: "Create a new tracker", message: "Give it a name", preferredStyle: .alert)
-
-		alertController.addTextField { $0.placeholder = "Name of the tracker" }
-
+		alertController.addTextField {
+            $0.autocapitalizationType = .allCharacters
+            $0.placeholder = "Name of the tracker"
+        }
 		let confirm = UIAlertAction.init(title: "OK", style: .default) { [weak self] (action) in
 			if let newListName = alertController.textFields?.first?.text,
                !newListName.isEmpty {
                 guard let trackingList = TrackingList.factory(with: newListName) else { return }
-                self?.constructTracker(trackingList)
+                self?.addTrackerBarController(trackingList)
+                self?.updateUI()
 			} else {
-				self?.popErrorMessage("Invalid tracker name")
+				self?.presentError("Invalid tracker name")
 			}
 		}
 		let cancel = UIAlertAction.init(title: "Cancel", style: .cancel, handler: nil)
@@ -124,7 +117,7 @@ extension MainViewController {
 		self.present(alertController, animated: true)
 	}
 
-	func popErrorMessage(_ message: String) {
+	func presentError(_ message: String) {
 		let alertController = UIAlertController.init(title: "Error occurred", message: message, preferredStyle: .alert)
 		self.present(alertController, animated: true, completion: nil)
 	}
@@ -132,17 +125,19 @@ extension MainViewController {
 
 // MARK: - Tracking control
 extension MainViewController {
-    func constructTracker(_ trackingList: TrackingList) {
-        let trackingBar = TrackingBar(trackingList: trackingList, dataSource: self)
-        contentView.addTrackingBar(trackingBar: trackingBar)
+    func addTrackerBarController(_ trackingList: TrackingList) {
+        let trackingController = TrackingBarController(trackingList: trackingList, delegate: self)
+        tbcDict[trackingList.listName] = trackingController
+        addChild(trackingController)
+        contentView.addTrackingBar(trackingBar: trackingController.contentView)
     }
 
 	func startTracking(_ listName: String) {
 		state.start(trackingListName: listName)
-		resumeTracking()
+		resumeTrackingIfNeeded()
 	}
 
-	func resumeTracking() {
+	func resumeTrackingIfNeeded() {
 		if state.isTracking {
 			startTrackingTimer()
 		}
@@ -150,17 +145,21 @@ extension MainViewController {
 
 	func endTracking() {
 		endTrackingTimer()
-		if let listName = state.trackingListName,
-           let newRecord = TrackingRecord.factory(with: listName, state.startTime ?? 0.00, (state.startTime ?? 0.00) + timeSpanSinceTrackingStarted) {
-            contentView.trackingBar(withTrackingListName: listName)?.trackingList.addToRecords(newRecord)
-            contentView.reloadTrackingBars()
+		if let listName = state.trackingListName {
+            tbcDict[listName]?.saveRecord(startTime: state.startTime ?? 0.0, endTime: (state.startTime ?? 0.0) + timeSpanSinceTrackingStarted)
 		}
         state.clear()
-        contentView.updateUI(hhmmString: nil, trackingListName: nil)
+        updateUI()
 	}
 
+    func resetTracking() {
+        for tbc in tbcDict.values { tbc.deleteAllRecords() }
+        state.clear()
+        updateUI()
+    }
+
 	func startTrackingTimer() {
-		timer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(updateUI), userInfo: nil, repeats: true)
+		timer = Timer.scheduledTimer(timeInterval: refreshInterval, target: self, selector: #selector(updateUI), userInfo: nil, repeats: true)
 		timer?.fire()
 	}
 
@@ -171,13 +170,14 @@ extension MainViewController {
 
 	@objc
     func updateUI() {
-        contentView.updateUI(hhmmString: gethhmmStringFromTimeInterval(timeSpanSinceTrackingStarted), trackingListName: state.trackingListName)
-        contentView.reloadTrackingBars()
+        contentView.enableStart(!tbcDict.keys.isEmpty)
+        contentView.updateUI(mmssString: state.isTracking ? toMMSS(timeSpanSinceTrackingStarted) : nil, trackingListName: state.trackingListName)
+        tbcDict.values.forEach { $0.updateUI() }
 	}
 }
 
 // MARK: - TrackingBarDataSource
-extension MainViewController: TrackingBarDataSource {
+extension MainViewController: TrackingBarDelegate {
     var timeSpanSinceTrackingStarted: TimeInterval {
         guard let startTime = state.startTime else { return 0.0 }
         let startDate = Date(timeIntervalSince1970: startTime)
@@ -190,8 +190,8 @@ extension MainViewController: TrackingBarDataSource {
     }
     
     func scaledHeight(totalHeight: CGFloat, _ timePeriod: TimeInterval) -> CGFloat {
-        let longestTime: TimeInterval = contentView.trackingBars.reduce(0.0) { max($0, $1.trackingList.timeFragmentsTotalLength) }
-        let timeCap: TimeInterval = max(longestTime, 2.0 * 3600.0)
+        let longestTime: TimeInterval = tbcDict.values.reduce(0.0) { max($0, $1.trackingList.timeFragmentsTotalLength) }
+        let timeCap: TimeInterval = max(longestTime, timePeriodCap)
         let timeScale: TimeInterval = timePeriod / timeCap
         return totalHeight * CGFloat(timeScale)
 	}
