@@ -24,7 +24,10 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupActions()
-        recover()
+        setupTrackingBars()
+        if state.isTracking {
+            startTrackingTimer()
+        }
     }
 
 	override func viewDidAppear(_ animated: Bool) {
@@ -34,26 +37,20 @@ class MainViewController: UIViewController {
 	}
 
 	@objc func willEnterForeground(_ notif: Notification) {
-		resumeTrackingIfNeeded()
+        if state.isTracking {
+            startTrackingTimer()
+        }
 	}
 
 	@objc func willResignActive(_ notif: Notification) {
-		endTrackingTimer()
-	}
-
-    func recover() {
-        let allList = TrackingList.fetchAllList()
-        for trackingList in allList {
-            addTrackerBarController(trackingList)
+        if state.isTracking {
+            endTrackingTimer()
         }
-        contentView.enableStart(!tbcDict.keys.isEmpty)
-        resumeTrackingIfNeeded()
-    }
+	}
 }
 
 
 extension MainViewController {
-
     func setupActions() {
         contentView.resetBtn.addTarget(self, action: #selector(handleResetTap), for: .touchUpInside)
         contentView.startBtn.addTarget(self, action: #selector(handleStartTap), for: .touchUpInside)
@@ -124,6 +121,14 @@ extension MainViewController {
 
 // MARK: - Tracking control
 extension MainViewController {
+    func setupTrackingBars() {
+        let allList = TrackingList.fetchAllList()
+        for trackingList in allList {
+            addTrackerBarController(trackingList)
+        }
+        contentView.enableStart(!tbcDict.keys.isEmpty)
+    }
+
     func addTrackerBarController(_ trackingList: TrackingList) {
         let trackingController = TrackingBarController(trackingList: trackingList, delegate: self)
         tbcDict[trackingList.listName] = trackingController
@@ -133,13 +138,7 @@ extension MainViewController {
 
 	func startTracking(_ listName: String) {
 		state.start(trackingListName: listName)
-		resumeTrackingIfNeeded()
-	}
-
-	func resumeTrackingIfNeeded() {
-		if state.isTracking {
-			startTrackingTimer()
-		}
+        startTrackingTimer()
 	}
 
 	func endTracking() {
@@ -152,6 +151,7 @@ extension MainViewController {
 	}
 
     func resetTracking() {
+        endTrackingTimer()
         for tbc in tbcDict.values { tbc.deleteAllRecords() }
         state.clear()
         updateUI()
