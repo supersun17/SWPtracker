@@ -16,6 +16,12 @@ class MainViewController: UIViewController {
     private var tbcDict: [String: TrackingBarController] = [:]
     private let refreshInterval: TimeInterval = 1
     private let timePeriodCap: TimeInterval = 2.0 * 3600.0
+    var timeSpanSinceTrackingStarted: TimeInterval {
+        guard let startTime = state.startTime else { return 0.0 }
+        let startDate = Date(timeIntervalSince1970: startTime)
+        let now = Date()
+        return now.timeIntervalSince(startDate)
+    }
 
     override func loadView() {
         view = MainView()
@@ -177,18 +183,15 @@ extension MainViewController {
 
 // MARK: - TrackingBarDataSource
 extension MainViewController: TrackingBarDelegate {
-    var timeSpanSinceTrackingStarted: TimeInterval {
-        guard let startTime = state.startTime else { return 0.0 }
-        let startDate = Date(timeIntervalSince1970: startTime)
-        let now = Date()
-        return now.timeIntervalSince(startDate)
+    func topRowHeight() -> TimeInterval {
+        return timeSpanSinceTrackingStarted
     }
 
     func isTracking(_ trackingListName: String) -> Bool {
         return state.trackingListName == trackingListName
     }
     
-    func scaledHeight(totalHeight: CGFloat, _ timePeriod: TimeInterval) -> CGFloat {
+    func rowHeight(totalHeight: CGFloat, _ timePeriod: TimeInterval) -> CGFloat {
         let longestTime: TimeInterval = tbcDict.values.reduce(0.0) { max($0, $1.trackingList.totalLength) }
         let timeCap: TimeInterval = max(longestTime, timePeriodCap)
         let timeScale: TimeInterval = timePeriod / timeCap

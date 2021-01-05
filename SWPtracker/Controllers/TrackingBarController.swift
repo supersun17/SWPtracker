@@ -11,9 +11,9 @@ import UIKit
 
 
 protocol TrackingBarDelegate: NSObjectProtocol {
-    var timeSpanSinceTrackingStarted: TimeInterval { get }
+    func topRowHeight() -> TimeInterval
     func isTracking(_ trackingListName: String) -> Bool
-    func scaledHeight(totalHeight: CGFloat, _ timePeriod: TimeInterval) -> CGFloat
+    func rowHeight(totalHeight: CGFloat, _ timePeriod: TimeInterval) -> CGFloat
 }
 
 
@@ -62,7 +62,7 @@ class TrackingBarController: UIViewController {
 
     private func reloadSubTitle() {
         let isTracking = delegate.isTracking(trackingList.listName)
-        let additionalTimeFragment = isTracking ? delegate.timeSpanSinceTrackingStarted : 0.0
+        let additionalTimeFragment = isTracking ? delegate.topRowHeight() : 0.0
         let totalTime = trackingList.totalLength + additionalTimeFragment
         contentView.subTitle.text = String(format: "%1$@\n%2$@", trackingList.listName, toMMSS(totalTime))
     }
@@ -77,16 +77,16 @@ extension TrackingBarController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let activeRow = delegate.isTracking(trackingList.listName) ? 1 : 0
-        return trackingList.sortedRecords.count + activeRow
+        return trackingList.numberOfRecords + activeRow
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0..<trackingList.numberOfRecords:
             let record = trackingList.sortedRecords[indexPath.row]
-            return delegate.scaledHeight(totalHeight: contentView.table.bounds.height, record.end - record.start)
+            return delegate.rowHeight(totalHeight: contentView.table.bounds.height, record.end - record.start)
         default:
-            return delegate.scaledHeight(totalHeight: contentView.table.bounds.height, delegate.timeSpanSinceTrackingStarted)
+            return delegate.rowHeight(totalHeight: contentView.table.bounds.height, delegate.topRowHeight())
         }
     }
 

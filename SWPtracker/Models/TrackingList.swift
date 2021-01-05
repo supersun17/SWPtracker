@@ -14,18 +14,10 @@ public class TrackingList: NSManagedObject {
 	@NSManaged public var listOrder: Int16
 	@NSManaged public var records: NSSet?
     static private var listNameSet: Set<String> = []
-    var sortedRecords: [TrackingRecord] {
-        if let recordsArray = records?.allObjects as? [TrackingRecord] {
-            return recordsArray.sorted { $0.start < $1.start }
-        } else {
-            return []
-        }
-    }
-    var numberOfRecords: Int { records?.allObjects.count ?? 0 }
-    var totalLength: TimeInterval {
-        let recordsArray = records?.allObjects as? [TrackingRecord] ?? []
-        return recordsArray.reduce(0, { $0 + $1.end - $1.start })
-    }
+    var allRecords: [TrackingRecord] { records?.allObjects as? [TrackingRecord] ?? []  }
+    var sortedRecords: [TrackingRecord] { allRecords.sorted { $0.start < $1.start } }
+    var numberOfRecords: Int { allRecords.count }
+    var totalLength: TimeInterval { allRecords.reduce(0, { $0 + $1.end - $1.start }) }
 
 	@nonobjc public class func fetchRequest() -> NSFetchRequest<TrackingList> {
 		return NSFetchRequest<TrackingList>(entityName: String(describing: TrackingList.self))
