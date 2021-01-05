@@ -13,10 +13,7 @@ public class TrackingList: NSManagedObject {
 	@NSManaged public var listName: String!
 	@NSManaged public var listOrder: Int16
 	@NSManaged public var records: NSSet?
-
     static private var listNameSet: Set<String> = []
-    private var cachedTimeFragmentsTotalLength: (count: Int, time: TimeInterval) = (0,0)
-    
     var sortedRecords: [TrackingRecord] {
         if let recordsArray = records?.allObjects as? [TrackingRecord] {
             return recordsArray.sorted { $0.start < $1.start }
@@ -25,15 +22,9 @@ public class TrackingList: NSManagedObject {
         }
     }
     var numberOfRecords: Int { records?.allObjects.count ?? 0 }
-    var timeFragmentsTotalLength: TimeInterval {
-        let recordsArray = sortedRecords
-        guard cachedTimeFragmentsTotalLength.count < recordsArray.count else { return cachedTimeFragmentsTotalLength.time }
-        let timeFragmentsTotalLength = recordsArray.reduce(0, { (prev, record) -> TimeInterval in
-            return prev + record.end - record.start
-        })
-        cachedTimeFragmentsTotalLength.count = recordsArray.count
-        cachedTimeFragmentsTotalLength.time = timeFragmentsTotalLength
-        return timeFragmentsTotalLength
+    var totalLength: TimeInterval {
+        let recordsArray = records?.allObjects as? [TrackingRecord] ?? []
+        return recordsArray.reduce(0, { $0 + $1.end - $1.start })
     }
 
 	@nonobjc public class func fetchRequest() -> NSFetchRequest<TrackingList> {
@@ -62,7 +53,6 @@ public class TrackingList: NSManagedObject {
         let trackingList = TrackingList(entity: entity, insertInto: cdContext)
         trackingList.listOrder = Int16(TrackingList.listNameSet.count - 1)
         trackingList.listName = listName
-
         do {
             try cdContext.save()
         } catch {

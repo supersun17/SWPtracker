@@ -63,7 +63,7 @@ class TrackingBarController: UIViewController {
     private func reloadSubTitle() {
         let isTracking = delegate.isTracking(trackingList.listName)
         let additionalTimeFragment = isTracking ? delegate.timeSpanSinceTrackingStarted : 0.0
-        let totalTime = trackingList.timeFragmentsTotalLength + additionalTimeFragment
+        let totalTime = trackingList.totalLength + additionalTimeFragment
         contentView.subTitle.text = String(format: "%1$@\n%2$@", trackingList.listName, toMMSS(totalTime))
     }
 }

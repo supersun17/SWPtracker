@@ -16,7 +16,6 @@ class TrackingState {
 			return true
 		}
 	}
-
 	var trackingListName: String? {
 		get {
 			return UserDefaults.standard.value(forKey: "trackingListName") as? String
@@ -25,7 +24,6 @@ class TrackingState {
 			UserDefaults.standard.set(newValue, forKey: "trackingListName")
 		}
 	}
-	
 	var startTime: Double? {
 		get {
 			return UserDefaults.standard.value(forKey: "startTime") as? Double

@@ -189,7 +189,7 @@ extension MainViewController: TrackingBarDelegate {
     }
     
     func scaledHeight(totalHeight: CGFloat, _ timePeriod: TimeInterval) -> CGFloat {
-        let longestTime: TimeInterval = tbcDict.values.reduce(0.0) { max($0, $1.trackingList.timeFragmentsTotalLength) }
+        let longestTime: TimeInterval = tbcDict.values.reduce(0.0) { max($0, $1.trackingList.totalLength) }
         let timeCap: TimeInterval = max(longestTime, timePeriodCap)
         let timeScale: TimeInterval = timePeriod / timeCap
         return totalHeight * CGFloat(timeScale)
