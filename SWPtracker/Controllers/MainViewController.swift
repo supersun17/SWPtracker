@@ -181,7 +181,7 @@ extension MainViewController {
 	}
 }
 
-// MARK: - TrackingBarDataSource
+// MARK: - TrackingBarDelegate
 extension MainViewController: TrackingBarDelegate {
     func topRowHeight() -> TimeInterval {
         return timeSpanSinceTrackingStarted
