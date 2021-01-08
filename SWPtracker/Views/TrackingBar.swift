@@ -23,6 +23,7 @@ class TrackingBar: UIView {
     }()
     private(set) lazy var subTitle: UILabel = {
         let lbl = UILabel()
+        lbl.adjustsFontSizeToFitWidth = true
         lbl.textColor = .black
         lbl.textAlignment = .center
         lbl.numberOfLines = 2
