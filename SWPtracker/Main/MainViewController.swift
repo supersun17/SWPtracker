@@ -6,96 +6,102 @@
 //  Copyright © 2019 Ming Sun. All rights reserved.
 //
 
+import Combine
 import UIKit
 
-class MainViewController: UIViewController {
-    var contentView: MainView { view as! MainView }
 
-	private var timer: Timer?
-	private let state = TrackingState()
-    private var tbcDict: [String: TrackingBarController] = [:]
-    private let refreshInterval: TimeInterval = 1
+class MainViewController: UIViewController {
+
+    lazy var contentView: MainView = MainView()
+
+    private let trackingService = TrackingService(refreshInterval: 1.0)
+    @Published private var tbcDict: [String: TrackingBarController] = [:]
     private let timePeriodCap: TimeInterval = 2.0 * 3600.0
-    var timeSpanSinceTrackingStarted: TimeInterval {
-        guard let startTime = state.startTime else { return 0.0 }
-        let startDate = Date(timeIntervalSince1970: startTime)
-        let now = Date()
-        return now.timeIntervalSince(startDate)
-    }
+    private var anyCancallables: Set<AnyCancellable> = []
+
 
     override func loadView() {
-        view = MainView()
+        view = contentView
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupActions()
         setupTrackingBars()
-        if state.isTracking {
-            startTrackingTimer()
-        }
+        setupObserving()
+        trackingService.restoreTracking()
     }
 
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
-		NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
-		NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+	@objc
+    func willEnterForeground(_ notif: Notification) {
+        trackingService.restoreTracking()
 	}
 
-	@objc func willEnterForeground(_ notif: Notification) {
-        if state.isTracking {
-            startTrackingTimer()
-        }
-	}
-
-	@objc func willResignActive(_ notif: Notification) {
-        if state.isTracking {
-            endTrackingTimer()
-        }
-	}
+	@objc
+    func willResignActive(_ notif: Notification) {
+        trackingService.pauseTracking()
+    }
 }
 
 
 extension MainViewController {
+
     func setupActions() {
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(willResignActive), name: UIApplication.willResignActiveNotification, object: nil)
         contentView.resetBtn.addTarget(self, action: #selector(handleResetTap), for: .touchUpInside)
         contentView.startBtn.addTarget(self, action: #selector(handleStartTap), for: .touchUpInside)
         contentView.addBtn.addTarget(self, action: #selector(handleAddTap), for: .touchUpInside)
     }
 
+    func setupObserving() {
+        trackingService.$timeSpan
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.updateUI()
+            }
+            .store(in: &anyCancallables)
+        $tbcDict
+            .receive(on: RunLoop.main)
+            .map { !$0.keys.isEmpty }
+            .sink { [weak self] shouldEnable in
+                self?.contentView.enableStartBtn(shouldEnable)
+            }
+            .store(in: &anyCancallables)
+    }
+
+    // TODO: tap to start, long press to cancel?
 	@objc
     func handleStartTap(_ sender: UIButton) {
-		if state.isTracking {
-			endTracking()
-		} else {
-			presentStartTrackingAlert()
-		}
+        if trackingService.state == .active {
+            trackingService.endTracking()
+        } else {
+            presentStartTrackingAlert()
+        }
 	}
+    private func presentStartTrackingAlert() {
+        let sheet = UIAlertController()
+        for listName in tbcDict.keys {
+            let action = UIAlertAction(title: listName, style: .default) { [weak trackingService] (_) in
+                trackingService?.startTracking(withTrackingListName: listName)
+            }
+            sheet.addAction(action)
+        }
+        let action = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        sheet.addAction(action)
+        present(sheet, animated: true, completion: nil)
+    }
 
 	@objc
     func handleResetTap(_ sender: UIButton) {
-        resetTracking()
+        trackingService.resetTracking()
 	}
 
 	@objc
     func handleAddTap(_ sender: UIButton) {
 		presentCreateNewTrackerAlert()
 	}
-
-	func presentStartTrackingAlert() {
-		let sheet = UIAlertController()
-        for listName in tbcDict.keys {
-            let action = UIAlertAction(title: listName, style: .default) { [weak self] (_) in
-                self?.startTracking(listName)
-            }
-            sheet.addAction(action)
-		}
-		let action = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-		sheet.addAction(action)
-		present(sheet, animated: true, completion: nil)
-	}
-
-	func presentCreateNewTrackerAlert() {
+	private func presentCreateNewTrackerAlert() {
 		let alertController = UIAlertController(title: "Create a new tracker", message: "Give it a name", preferredStyle: .alert)
 		alertController.addTextField {
             $0.autocapitalizationType = .allCharacters
@@ -115,7 +121,6 @@ extension MainViewController {
 		for action in [cancel,confirm] {
 			alertController.addAction(action)
 		}
-
 		self.present(alertController, animated: true)
 	}
 
@@ -127,12 +132,12 @@ extension MainViewController {
 
 // MARK: - Tracking control
 extension MainViewController {
+
     func setupTrackingBars() {
         let allList = TrackingList.fetchAllList()
         for trackingList in allList {
             addTrackerBarController(trackingList)
         }
-        contentView.enableStart(!tbcDict.keys.isEmpty)
     }
 
     func addTrackerBarController(_ trackingList: TrackingList) {
@@ -142,53 +147,22 @@ extension MainViewController {
         contentView.addTrackingBar(trackingBar: trackingController.contentView)
     }
 
-	func startTracking(_ listName: String) {
-		state.start(trackingListName: listName)
-        startTrackingTimer()
-	}
-
-	func endTracking() {
-		endTrackingTimer()
-		if let listName = state.trackingListName {
-            tbcDict[listName]?.saveRecord(startTime: state.startTime ?? 0.0, endTime: (state.startTime ?? 0.0) + timeSpanSinceTrackingStarted)
-		}
-        state.clear()
-        updateUI()
-	}
-
-    func resetTracking() {
-        endTrackingTimer()
-        for tbc in tbcDict.values { tbc.deleteAllRecords() }
-        state.clear()
-        updateUI()
-    }
-
-	func startTrackingTimer() {
-		timer = Timer.scheduledTimer(timeInterval: refreshInterval, target: self, selector: #selector(updateUI), userInfo: nil, repeats: true)
-		timer?.fire()
-	}
-
-    func endTrackingTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
-
-	@objc
     func updateUI() {
-        contentView.enableStart(!tbcDict.keys.isEmpty)
-        contentView.updateUI(mmssString: state.isTracking ? toMMSS(timeSpanSinceTrackingStarted) : nil, trackingListName: state.trackingListName)
+        contentView.updateUI(mmssString: trackingService.timeSpan?.toMMSSString,
+                             trackingListName: trackingService.trackingListName)
         tbcDict.values.forEach { $0.updateUI() }
 	}
 }
 
 // MARK: - TrackingBarDelegate
+
+// TODO: refactor this part. No need to use delegate, subscribe from tracking service make more sense
 extension MainViewController: TrackingBarDelegate {
-    func topRowHeight() -> TimeInterval {
-        return timeSpanSinceTrackingStarted
-    }
+
+    var topRowTimeSpan: TimeInterval { trackingService.timeSpan ?? 0.0 }
 
     func isTracking(_ trackingListName: String) -> Bool {
-        return state.trackingListName == trackingListName
+        return trackingService.trackingListName == trackingListName
     }
     
     func rowHeight(totalHeight: CGFloat, _ timePeriod: TimeInterval) -> CGFloat {

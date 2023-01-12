@@ -11,14 +11,37 @@ import UIKit
 
 
 protocol TrackingBarDelegate: NSObjectProtocol {
-    func topRowHeight() -> TimeInterval
+    var topRowTimeSpan: TimeInterval { get }
     func isTracking(_ trackingListName: String) -> Bool
     func rowHeight(totalHeight: CGFloat, _ timePeriod: TimeInterval) -> CGFloat
 }
 
 
 class TrackingBarController: UIViewController {
-    var contentView: TrackingBar { view as! TrackingBar }
+
+    lazy var contentView: TrackingBar = TrackingBar()
+
+    let ranbowColors: [UIColor] = [
+        UIColor(hexString: "#fb131b"),
+        UIColor(hexString: "#fb5713"),
+        UIColor(hexString: "#fba213"),
+        UIColor(hexString: "#fbdb13"),
+        UIColor(hexString: "#f3fb13"),
+        UIColor(hexString: "#c7fb13"),
+        UIColor(hexString: "#91fb13"),
+        UIColor(hexString: "#13fb18"),
+        UIColor(hexString: "#13fbbd"),
+        UIColor(hexString: "#13fbf9"),
+        UIColor(hexString: "#13d1fb"),
+        UIColor(hexString: "#13a6fb"),
+        UIColor(hexString: "#1375fb"),
+        UIColor(hexString: "#1320fb"),
+        UIColor(hexString: "#5413fb"),
+        UIColor(hexString: "#9a13fb"),
+        UIColor(hexString: "#cf13fb"),
+        UIColor(hexString: "#fb13e8"),
+        UIColor(hexString: "#fb13a2")
+    ]
     weak var delegate: TrackingBarDelegate!
     private let cellID: String = "TrackingListCell"
     let trackingList: TrackingList
@@ -34,7 +57,7 @@ class TrackingBarController: UIViewController {
     }
 
     override func loadView() {
-        view = TrackingBar()
+        view = contentView
     }
 
     override func viewDidLoad() {
@@ -62,9 +85,9 @@ class TrackingBarController: UIViewController {
 
     private func reloadSubTitle() {
         let isTracking = delegate.isTracking(trackingList.listName)
-        let additionalTimeFragment = isTracking ? delegate.topRowHeight() : 0.0
+        let additionalTimeFragment = isTracking ? delegate.topRowTimeSpan : 0.0
         let totalTime = trackingList.totalLength + additionalTimeFragment
-        contentView.subTitle.text = String(format: "%1$@\n%2$@", trackingList.listName, toMMSS(totalTime))
+        contentView.subTitle.text = String(format: "%1$@\n%2$@", trackingList.listName, totalTime.toMMSSString)
     }
 }
 
@@ -86,7 +109,7 @@ extension TrackingBarController: UITableViewDelegate, UITableViewDataSource {
             let record = trackingList.sortedRecords[indexPath.row]
             return delegate.rowHeight(totalHeight: contentView.table.bounds.height, record.end - record.start)
         default:
-            return delegate.rowHeight(totalHeight: contentView.table.bounds.height, delegate.topRowHeight())
+            return delegate.rowHeight(totalHeight: contentView.table.bounds.height, delegate.topRowTimeSpan)
         }
     }
 

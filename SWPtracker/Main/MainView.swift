@@ -74,7 +74,7 @@ class MainView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func enableStart(_ enable: Bool) {
+    func enableStartBtn(_ enable: Bool) {
         startBtn.isEnabled = enable
         startBtn.backgroundColor = enable ? .systemBlue : .white
     }

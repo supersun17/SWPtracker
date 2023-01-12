@@ -12,27 +12,6 @@ import CoreData
 
 var cdContext: NSManagedObjectContext { (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext }
 
-let ranbowColors = [
-    UIColor(hexString: "#fb131b"),
-    UIColor(hexString: "#fb5713"),
-    UIColor(hexString: "#fba213"),
-    UIColor(hexString: "#fbdb13"),
-    UIColor(hexString: "#f3fb13"),
-    UIColor(hexString: "#c7fb13"),
-    UIColor(hexString: "#91fb13"),
-    UIColor(hexString: "#13fb18"),
-    UIColor(hexString: "#13fbbd"),
-    UIColor(hexString: "#13fbf9"),
-    UIColor(hexString: "#13d1fb"),
-    UIColor(hexString: "#13a6fb"),
-    UIColor(hexString: "#1375fb"),
-    UIColor(hexString: "#1320fb"),
-    UIColor(hexString: "#5413fb"),
-    UIColor(hexString: "#9a13fb"),
-    UIColor(hexString: "#cf13fb"),
-    UIColor(hexString: "#fb13e8"),
-    UIColor(hexString: "#fb13a2")
-]
 
 extension UIColor {
 	//// Copied as it is from Stack link
@@ -56,16 +35,20 @@ extension UIColor {
 	}
 }
 
-func toHHMM(_ time: TimeInterval) -> String {
-	let secondsPast = time
-	let hours = Int(secondsPast / 3600)
-	let minutes = Int((secondsPast - 3600 * TimeInterval(hours)) / 60)
-	return String(format: "%02d:%02d", hours, minutes)
-}
 
-func toMMSS(_ time: TimeInterval) -> String {
-    let secondsPast = time
-    let minutes = Int(secondsPast / 60)
-    let seconds = Int(secondsPast - 60 * TimeInterval(minutes))
-    return String(format: "%02d:%02d", minutes, seconds)
+extension TimeInterval {
+
+    var toHHMMString: String {
+        let secondsPast = self
+        let hours = Int(secondsPast / 3600)
+        let minutes = Int((secondsPast - 3600 * TimeInterval(hours)) / 60)
+        return String(format: "%02d:%02d", hours, minutes)
+    }
+
+    var toMMSSString: String {
+        let secondsPast = self
+        let minutes = Int(secondsPast / 60)
+        let seconds = Int(secondsPast - 60 * TimeInterval(minutes))
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
 }

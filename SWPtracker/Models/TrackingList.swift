@@ -58,10 +58,7 @@ public class TrackingList: NSManagedObject {
 	static func fetchAllList() -> [TrackingList] {
 		var trackingLists: [TrackingList] = []
 		do {
-			let result = try cdContext.fetch(fetchRequest())
-			if let list = result as? [TrackingList] {
-				trackingLists = list
-			}
+		    trackingLists = try cdContext.fetch(fetchRequest())
 		} catch {
 			print("TrackingLists fetching failed: \(error.localizedDescription)")
 			return []

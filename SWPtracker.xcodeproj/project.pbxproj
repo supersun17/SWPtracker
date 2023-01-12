@@ -17,7 +17,7 @@
 		3AFB0736227F3DF300455E92 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AFB0735227F3DF300455E92 /* Assets.xcassets */; };
 		3AFB0739227F3DF300455E92 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AFB0737227F3DF300455E92 /* LaunchScreen.storyboard */; };
 		3AFB0744227F3DF300455E92 /* SWPtrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB0743227F3DF300455E92 /* SWPtrackerTests.swift */; };
-		3AFB074F227F56DA00455E92 /* TrackingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB074E227F56DA00455E92 /* TrackingState.swift */; };
+		3AFB074F227F56DA00455E92 /* TrackingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB074E227F56DA00455E92 /* TrackingService.swift */; };
 		3AFB0751227F572B00455E92 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB0750227F572B00455E92 /* Helpers.swift */; };
 		82A7EE3025A2BAAC00FD5431 /* TrackingBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A7EE2F25A2BAAC00FD5431 /* TrackingBarController.swift */; };
 		82AA1482254ABB3800280B41 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AA1481254ABB3800280B41 /* MainView.swift */; };
@@ -48,7 +48,7 @@
 		3AFB073F227F3DF300455E92 /* SWPtrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SWPtrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AFB0743227F3DF300455E92 /* SWPtrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWPtrackerTests.swift; sourceTree = "<group>"; };
 		3AFB0745227F3DF300455E92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3AFB074E227F56DA00455E92 /* TrackingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingState.swift; sourceTree = "<group>"; };
+		3AFB074E227F56DA00455E92 /* TrackingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingService.swift; sourceTree = "<group>"; };
 		3AFB0750227F572B00455E92 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		82A7EE2F25A2BAAC00FD5431 /* TrackingBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingBarController.swift; sourceTree = "<group>"; };
 		82AA1481254ABB3800280B41 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -76,37 +76,37 @@
 			isa = PBXGroup;
 			children = (
 				3AD3B2E02295F57900C1BB8D /* DataModel.xcdatamodeld */,
-				3AFB074E227F56DA00455E92 /* TrackingState.swift */,
 				3AD3B2B22295D20700C1BB8D /* TrackingList.swift */,
 				3AD3B2B52295D4E100C1BB8D /* TrackingRecord.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
 		};
-		3AD3B2B72295D52A00C1BB8D /* Controllers */ = {
+		3AD3B2B72295D52A00C1BB8D /* Main */ = {
 			isa = PBXGroup;
 			children = (
 				3AFB0730227F3DF100455E92 /* MainViewController.swift */,
-				82A7EE2F25A2BAAC00FD5431 /* TrackingBarController.swift */,
+				82AA1481254ABB3800280B41 /* MainView.swift */,
 			);
-			path = Controllers;
+			path = Main;
 			sourceTree = "<group>";
 		};
 		3AD3B2B82295D54600C1BB8D /* Util */ = {
 			isa = PBXGroup;
 			children = (
 				3AFB0750227F572B00455E92 /* Helpers.swift */,
+				3AFB074E227F56DA00455E92 /* TrackingService.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
 		};
-		3AD3B2BB2295DFA900C1BB8D /* Views */ = {
+		3AD3B2BB2295DFA900C1BB8D /* TrackingBar */ = {
 			isa = PBXGroup;
 			children = (
-				82AA1481254ABB3800280B41 /* MainView.swift */,
+				82A7EE2F25A2BAAC00FD5431 /* TrackingBarController.swift */,
 				3AD3B2B92295D70900C1BB8D /* TrackingBar.swift */,
 			);
-			path = Views;
+			path = TrackingBar;
 			sourceTree = "<group>";
 		};
 		3AFB0722227F3DF100455E92 = {
@@ -133,8 +133,8 @@
 			children = (
 				3AD3B2B82295D54600C1BB8D /* Util */,
 				3AD3B2B42295D22400C1BB8D /* Models */,
-				3AD3B2B72295D52A00C1BB8D /* Controllers */,
-				3AD3B2BB2295DFA900C1BB8D /* Views */,
+				3AD3B2B72295D52A00C1BB8D /* Main */,
+				3AD3B2BB2295DFA900C1BB8D /* TrackingBar */,
 				82345240254BB3720056F097 /* Startup */,
 				3AFB0735227F3DF300455E92 /* Assets.xcassets */,
 			);
@@ -269,7 +269,7 @@
 				3AD3B2E22295F57900C1BB8D /* DataModel.xcdatamodeld in Sources */,
 				3AD3B2BA2295D70900C1BB8D /* TrackingBar.swift in Sources */,
 				3AD3B2B62295D4E100C1BB8D /* TrackingRecord.swift in Sources */,
-				3AFB074F227F56DA00455E92 /* TrackingState.swift in Sources */,
+				3AFB074F227F56DA00455E92 /* TrackingService.swift in Sources */,
 				3AFB072F227F3DF100455E92 /* AppDelegate.swift in Sources */,
 				3AFB0751227F572B00455E92 /* Helpers.swift in Sources */,
 				3AD3B2B32295D20700C1BB8D /* TrackingList.swift in Sources */,
@@ -431,7 +431,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RV56STKFC9;
 				INFOPLIST_FILE = SWPtracker/Startup/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -450,7 +450,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RV56STKFC9;
 				INFOPLIST_FILE = SWPtracker/Startup/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
