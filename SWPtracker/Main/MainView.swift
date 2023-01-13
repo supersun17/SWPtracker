@@ -119,9 +119,9 @@ private extension MainView {
         ]
         constraints += [
             barStack.topAnchor.constraint(equalTo: timeSpent.bottomAnchor, constant: 15.0),
-            barStack.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 60.0),
+            barStack.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 30.0),
             barStack.bottomAnchor.constraint(equalTo: startBtn.topAnchor, constant: -1.0 * 30.0),
-            barStack.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -1.0 * 60.0)
+            barStack.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -1.0 * 30.0)
         ]
         constraints += [
             resetBtn.centerYAnchor.constraint(equalTo: startBtn.centerYAnchor),
