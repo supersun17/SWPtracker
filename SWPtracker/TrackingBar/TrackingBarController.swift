@@ -42,7 +42,7 @@ class TrackingBarController: UIViewController {
         guard let trackingListName = trackingService?.trackingListName else { return false }
         return trackingList.listName == trackingListName
     }
-    private var trackingTimeSpan: TimeInterval {
+    var trackingTimeSpan: TimeInterval {
         guard isBeingTracked else { return 0.0 }
         return trackingService?.timeSpan ?? 0.0
     }
@@ -112,8 +112,7 @@ extension TrackingBarController: UITableViewDelegate, UITableViewDataSource {
             let record = trackingList.sortedRecords[indexPath.row]
             return rowHeight(byTimePeriod: record.end - record.start)
         default:
-            let timeSpan = isBeingTracked ? trackingTimeSpan : 0.0
-            return rowHeight(byTimePeriod: timeSpan)
+            return rowHeight(byTimePeriod: trackingTimeSpan)
         }
     }
     private func rowHeight(byTimePeriod timePeriod: TimeInterval) -> CGFloat {
@@ -121,11 +120,11 @@ extension TrackingBarController: UITableViewDelegate, UITableViewDataSource {
         let tableHeight = contentView.table.bounds.height
         let defaultTableTimeSpan: TimeInterval = mainVC?.defaultTableTimeSpan ?? 10.0
         let longestTime: TimeInterval = tbcDict.values.reduce(defaultTableTimeSpan) {
-            let finalTotalLength = $1.trackingList.totalLength + trackingTimeSpan
+            let finalTotalLength = $1.trackingList.totalLength + $1.trackingTimeSpan
             return max($0, finalTotalLength)
         }
         let timeScale: TimeInterval = timePeriod / longestTime
-        return tableHeight * CGFloat(timeScale)
+        return tableHeight * CGFloat(timeScale) * 0.9
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -16,6 +16,7 @@ class MainViewController: UIViewController {
 
     private let trackingService = TrackingService(refreshInterval: 1.0)
     @Published private(set) var tbcDict: [String: TrackingBarController] = [:]
+    private var listNames: [String] = []
     private var anyCancallables: Set<AnyCancellable> = []
     let defaultTableTimeSpan: TimeInterval = 10.0
 
@@ -85,7 +86,7 @@ extension MainViewController {
 	}
     private func presentStartTrackingAlert() {
         let sheet = UIAlertController()
-        for listName in tbcDict.keys {
+        for listName in listNames {
             let action = UIAlertAction(title: listName, style: .default) { [weak trackingService] (_) in
                 trackingService?.startTracking(withTrackingListName: listName)
             }
@@ -141,6 +142,7 @@ extension MainViewController {
         let allList = TrackingList.fetchAllList()
         for trackingList in allList {
             addTrackerBarController(trackingList)
+            listNames.append(trackingList.listName)
         }
     }
 
