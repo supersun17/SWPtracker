@@ -10,9 +10,6 @@ import UIKit
 import CoreData
 
 
-var cdContext: NSManagedObjectContext { (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext }
-
-
 extension UIColor {
 	//// Copied as it is from Stack link
 	/// Not moved values to constant as it would be difficult to name them

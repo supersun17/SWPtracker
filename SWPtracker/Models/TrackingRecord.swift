@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 
 public class TrackingRecord: NSManagedObject {
+
 	@NSManaged public var label: String?
 	@NSManaged public var start: Double
 	@NSManaged public var end: Double

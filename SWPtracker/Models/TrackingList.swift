@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 
 public class TrackingList: NSManagedObject {
+
 	@NSManaged public var listName: String!
 	@NSManaged public var listOrder: Int16
 	@NSManaged public var records: NSSet?
@@ -69,12 +70,18 @@ public class TrackingList: NSManagedObject {
 
     func delete() {
         let listNameBeforeDeletion = listName!
-        cdContext.delete(self)
+        Self.cdContext.delete(self)
         do {
-            try cdContext.save()
+            try Self.cdContext.save()
         } catch {
             print("TrackingList saving failed: \(error.localizedDescription)")
         }
         TrackingList.listNameSet.remove(listNameBeforeDeletion)
     }
+}
+
+
+extension NSManagedObject {
+
+    static var cdContext: NSManagedObjectContext { (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext }
 }
