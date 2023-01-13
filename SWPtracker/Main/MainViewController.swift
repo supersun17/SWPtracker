@@ -71,7 +71,6 @@ extension MainViewController {
             .store(in: &anyCancallables)
     }
 
-    // TODO: tap to start, long press to cancel?
 	@objc
     func handleStartTap(_ sender: UIButton) {
         if trackingService.state == .active {
@@ -99,6 +98,10 @@ extension MainViewController {
 
 	@objc
     func handleResetTap(_ sender: UIButton) {
+        tbcDict.values.forEach {
+            $0.deleteAllRecords()
+            $0.updateUI()
+        }
         trackingService.resetTracking()
 	}
 
@@ -142,7 +145,6 @@ extension MainViewController {
         let allList = TrackingList.fetchAllList()
         for trackingList in allList {
             addTrackerBarController(trackingList)
-            listNames.append(trackingList.listName)
         }
     }
 
@@ -152,6 +154,7 @@ extension MainViewController {
         addChild(trackingController)
         trackingController.viewDidLoad()
         contentView.barStack.addArrangedSubview(trackingController.contentView)
+        listNames.append(trackingList.listName)
     }
 
     func updateUI() {

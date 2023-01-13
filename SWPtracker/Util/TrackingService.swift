@@ -82,7 +82,6 @@ class TrackingService {
 
     func resetTracking() {
         endTrackingTimer()
-//        for tbc in tbcDict.values { tbc.deleteAllRecords() }
         clear()
         state = .inactive
     }
