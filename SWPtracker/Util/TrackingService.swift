@@ -18,7 +18,7 @@ class TrackingService {
         case paused
     }
 
-    // Subject
+    // Published
     @Published var timeSpan: TimeInterval? = nil
     @Published var state: State = .inactive
 
@@ -71,6 +71,7 @@ class TrackingService {
                                              userInfo: nil,
                                              repeats: true)
         trackingTimer?.fire()
+        state = .active
     }
 
     func endTracking() {

@@ -15,8 +15,7 @@ class MainViewController: UIViewController {
     lazy var contentView: MainView = MainView()
 
     private let trackingService = TrackingService(refreshInterval: 1.0)
-    @Published private var tbcDict: [String: TrackingBarController] = [:]
-    private let timePeriodCap: TimeInterval = 2.0 * 3600.0
+    @Published private(set) var tbcDict: [String: TrackingBarController] = [:]
     private var anyCancallables: Set<AnyCancellable> = []
 
 
@@ -141,7 +140,7 @@ extension MainViewController {
     }
 
     func addTrackerBarController(_ trackingList: TrackingList) {
-        let trackingController = TrackingBarController(trackingList: trackingList, delegate: self)
+        let trackingController = TrackingBarController(trackingList: trackingList, trackingService: trackingService)
         tbcDict[trackingList.listName] = trackingController
         addChild(trackingController)
         contentView.addTrackingBar(trackingBar: trackingController.contentView)
@@ -150,26 +149,10 @@ extension MainViewController {
     func updateUI() {
         contentView.updateUI(mmssString: trackingService.timeSpan?.toMMSSString,
                              trackingListName: trackingService.trackingListName)
-        tbcDict.values.forEach { $0.updateUI() }
+        guard let listName = trackingService.trackingListName,
+              let activeTbc = tbcDict[listName] else {
+            return
+        }
+        activeTbc.updateUI()
 	}
 }
-
-// MARK: - TrackingBarDelegate
-
-// TODO: refactor this part. No need to use delegate, subscribe from tracking service make more sense
-extension MainViewController: TrackingBarDelegate {
-
-    var topRowTimeSpan: TimeInterval { trackingService.timeSpan ?? 0.0 }
-
-    func isTracking(_ trackingListName: String) -> Bool {
-        return trackingService.trackingListName == trackingListName
-    }
-    
-    func rowHeight(totalHeight: CGFloat, _ timePeriod: TimeInterval) -> CGFloat {
-        let longestTime: TimeInterval = tbcDict.values.reduce(0.0) { max($0, $1.trackingList.totalLength) }
-        let timeCap: TimeInterval = max(longestTime, timePeriodCap)
-        let timeScale: TimeInterval = timePeriod / timeCap
-        return totalHeight * CGFloat(timeScale)
-	}
-}
-

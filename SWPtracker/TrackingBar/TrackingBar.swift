@@ -57,6 +57,7 @@ private extension TrackingBar {
             table.trailingAnchor.constraint(equalTo: trailingAnchor),
         ]
         constraints += [
+            subTitle.heightAnchor.constraint(equalToConstant: 40.0),
             subTitle.topAnchor.constraint(equalTo: table.bottomAnchor),
             subTitle.leadingAnchor.constraint(equalTo: leadingAnchor),
             subTitle.bottomAnchor.constraint(equalTo: bottomAnchor),

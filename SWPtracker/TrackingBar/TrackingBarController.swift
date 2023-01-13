@@ -9,14 +9,6 @@
 import UIKit
 
 
-
-protocol TrackingBarDelegate: NSObjectProtocol {
-    var topRowTimeSpan: TimeInterval { get }
-    func isTracking(_ trackingListName: String) -> Bool
-    func rowHeight(totalHeight: CGFloat, _ timePeriod: TimeInterval) -> CGFloat
-}
-
-
 class TrackingBarController: UIViewController {
 
     lazy var contentView: TrackingBar = TrackingBar()
@@ -42,13 +34,14 @@ class TrackingBarController: UIViewController {
         UIColor(hexString: "#fb13e8"),
         UIColor(hexString: "#fb13a2")
     ]
-    weak var delegate: TrackingBarDelegate!
+    weak var trackingService: TrackingService?
+    weak var mainVC: MainViewController? { parent as? MainViewController }
     private let cellID: String = "TrackingListCell"
     let trackingList: TrackingList
 
-    init(trackingList tkl: TrackingList, delegate dlg: TrackingBarDelegate) {
-        trackingList = tkl
-        delegate = dlg
+    init(trackingList: TrackingList, trackingService: TrackingService?) {
+        self.trackingList = trackingList
+        self.trackingService = trackingService
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -84,8 +77,7 @@ class TrackingBarController: UIViewController {
     }
 
     private func reloadSubTitle() {
-        let isTracking = delegate.isTracking(trackingList.listName)
-        let additionalTimeFragment = isTracking ? delegate.topRowTimeSpan : 0.0
+        let additionalTimeFragment = trackingService?.timeSpan ?? 0.0
         let totalTime = trackingList.totalLength + additionalTimeFragment
         contentView.subTitle.text = String(format: "%1$@\n%2$@", trackingList.listName, totalTime.toMMSSString)
     }
@@ -99,7 +91,7 @@ extension TrackingBarController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let activeRow = delegate.isTracking(trackingList.listName) ? 1 : 0
+        let activeRow = (trackingService?.state == .active) ? 1 : 0
         return trackingList.numberOfRecords + activeRow
     }
 
@@ -107,10 +99,18 @@ extension TrackingBarController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.row {
         case 0..<trackingList.numberOfRecords:
             let record = trackingList.sortedRecords[indexPath.row]
-            return delegate.rowHeight(totalHeight: contentView.table.bounds.height, record.end - record.start)
+            return rowHeight(byTimePeriod: record.end - record.start)
         default:
-            return delegate.rowHeight(totalHeight: contentView.table.bounds.height, delegate.topRowTimeSpan)
+            return rowHeight(byTimePeriod: trackingService?.timeSpan ?? 0.0)
         }
+    }
+    private func rowHeight(byTimePeriod timePeriod: TimeInterval) -> CGFloat {
+        guard let tbcDict = mainVC?.tbcDict else { return 0.0 }
+        let tableHeight = contentView.table.bounds.height
+        let longestTime: TimeInterval = tbcDict.values.reduce(0.0) { max($0, $1.trackingList.totalLength) }
+        let maxTimePeriod: TimeInterval = 60
+        let timeScale: TimeInterval = timePeriod / min(maxTimePeriod, longestTime)
+        return tableHeight * CGFloat(timeScale)
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
