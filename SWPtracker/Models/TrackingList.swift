@@ -37,8 +37,8 @@ public class TrackingList: NSManagedObject {
 
 
 	static func factory(with listName: String) -> TrackingList? {
-        guard TrackingList.listNameSet.insert(listName).inserted,
-              !listName.isEmpty,
+        guard !listName.isEmpty,
+              TrackingList.listNameSet.insert(listName).inserted,
               let entity = NSEntityDescription.entity(forEntityName: String(describing: String(describing: TrackingList.self)), in: cdContext) else {
             return nil
         }
@@ -66,4 +66,15 @@ public class TrackingList: NSManagedObject {
 
 		return trackingLists
 	}
+
+    func delete() {
+        let listNameBeforeDeletion = listName!
+        cdContext.delete(self)
+        do {
+            try cdContext.save()
+        } catch {
+            print("TrackingList saving failed: \(error.localizedDescription)")
+        }
+        TrackingList.listNameSet.remove(listNameBeforeDeletion)
+    }
 }

@@ -37,8 +37,8 @@ class TrackingBarController: UIViewController {
     weak var trackingService: TrackingService?
     weak var mainVC: MainViewController? { parent as? MainViewController }
     private let cellID: String = "TrackingListCell"
-    private let trackingList: TrackingList
-    private var isBeingTracked: Bool {
+    let trackingList: TrackingList
+    var isBeingTracked: Bool {
         guard let trackingListName = trackingService?.trackingListName else { return false }
         return trackingList.listName == trackingListName
     }
@@ -64,8 +64,24 @@ class TrackingBarController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpTable()
+        setupTable()
+        setupActions()
         reloadSubTitle()
+    }
+
+    private func setupActions() {
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        contentView.table.addGestureRecognizer(longPress)
+    }
+
+    @objc
+    private func handleLongPress(_ sender: UILongPressGestureRecognizer) {
+        switch sender.state {
+        case .ended:
+            mainVC?.handleTableLongPress(self)
+        default:
+            break
+        }
     }
 
     func saveRecord(startTime: TimeInterval, endTime: TimeInterval) {
@@ -96,7 +112,7 @@ class TrackingBarController: UIViewController {
 
 extension TrackingBarController: UITableViewDelegate, UITableViewDataSource {
 
-    func setUpTable() {
+    private func setupTable() {
         contentView.table.delegate = self
         contentView.table.dataSource = self
     }

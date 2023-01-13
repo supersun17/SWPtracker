@@ -74,15 +74,18 @@ extension MainViewController {
 	@objc
     func handleStartTap(_ sender: UIButton) {
         if trackingService.state == .active {
-            if let listName = trackingService.trackingListName {
-                tbcDict[listName]?.saveRecord(startTime: trackingService.startTime ?? 0.0,
-                                              endTime: (trackingService.startTime ?? 0.0) + (trackingService.timeSpan ?? 0.0))
-            }
-            trackingService.endTracking()
+            handleEndTap()
         } else {
             presentStartTrackingAlert()
         }
 	}
+    private func handleEndTap() {
+        if let listName = trackingService.trackingListName {
+            tbcDict[listName]?.saveRecord(startTime: trackingService.startTime ?? 0.0,
+                                          endTime: (trackingService.startTime ?? 0.0) + (trackingService.timeSpan ?? 0.0))
+        }
+        trackingService.endTracking()
+    }
     private func presentStartTrackingAlert() {
         let sheet = UIAlertController()
         for listName in listNames {
@@ -131,6 +134,32 @@ extension MainViewController {
 		}
 		self.present(alertController, animated: true)
 	}
+
+    func handleTableLongPress(_ tbc: TrackingBarController) {
+        presentConfirmListDeletionAlert(tbc)
+    }
+    private func presentConfirmListDeletionAlert(_ tbc: TrackingBarController) {
+        let alertController = UIAlertController(title: "Delete this row?", message: "All records will be remvoed along with this list", preferredStyle: .alert)
+        let confirm = UIAlertAction(title: "OK", style: .default) { [weak self, weak tbc] (action) in
+            guard let tbc = tbc else { return }
+            self?.removeList(tbc)
+        }
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        for action in [cancel,confirm] {
+            alertController.addAction(action)
+        }
+        self.present(alertController, animated: true)
+    }
+    private func removeList(_ tbc: TrackingBarController) {
+        if tbc.isBeingTracked {
+            handleEndTap()
+        }
+        listNames.removeAll { $0 == tbc.trackingList.listName }
+        tbcDict[tbc.trackingList.listName] = nil
+        tbc.removeFromParent()
+        tbc.contentView.removeFromSuperview()
+        tbc.trackingList.delete()
+    }
 
 	func presentError(_ message: String) {
 		let alertController = UIAlertController(title: "Error occurred", message: message, preferredStyle: .alert)
