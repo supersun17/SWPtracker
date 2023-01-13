@@ -29,7 +29,7 @@ class MainView: UIView {
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
-    private var barStack: UIStackView = {
+    private(set) var barStack: UIStackView = {
         let s = UIStackView()
         s.distribution = .fillEqually
         s.alignment = .fill
@@ -91,10 +91,6 @@ class MainView: UIView {
             timeSpent.text = "00:00"
             trackingListName.text = "NONE"
         }
-    }
-
-    func addTrackingBar(trackingBar: TrackingBar) {
-        barStack.addArrangedSubview(trackingBar)
     }
 }
 

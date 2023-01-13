@@ -37,7 +37,16 @@ class TrackingBarController: UIViewController {
     weak var trackingService: TrackingService?
     weak var mainVC: MainViewController? { parent as? MainViewController }
     private let cellID: String = "TrackingListCell"
-    let trackingList: TrackingList
+    private let trackingList: TrackingList
+    private var isBeingTracked: Bool {
+        guard let trackingListName = trackingService?.trackingListName else { return false }
+        return trackingList.listName == trackingListName
+    }
+    private var trackingTimeSpan: TimeInterval {
+        guard isBeingTracked else { return 0.0 }
+        return trackingService?.timeSpan ?? 0.0
+    }
+
 
     init(trackingList: TrackingList, trackingService: TrackingService?) {
         self.trackingList = trackingList
@@ -73,25 +82,27 @@ class TrackingBarController: UIViewController {
 
     func updateUI() {
         contentView.table.reloadData()
-        reloadSubTitle()
+        if isBeingTracked {
+            reloadSubTitle()
+        }
     }
 
     private func reloadSubTitle() {
-        let additionalTimeFragment = trackingService?.timeSpan ?? 0.0
-        let totalTime = trackingList.totalLength + additionalTimeFragment
+        let totalTime = trackingList.totalLength + trackingTimeSpan
         contentView.subTitle.text = String(format: "%1$@\n%2$@", trackingList.listName, totalTime.toMMSSString)
     }
 }
 
 
 extension TrackingBarController: UITableViewDelegate, UITableViewDataSource {
+
     func setUpTable() {
         contentView.table.delegate = self
         contentView.table.dataSource = self
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let activeRow = (trackingService?.state == .active) ? 1 : 0
+        let activeRow = (trackingService?.state == .active) && isBeingTracked ? 1 : 0
         return trackingList.numberOfRecords + activeRow
     }
 
@@ -101,15 +112,19 @@ extension TrackingBarController: UITableViewDelegate, UITableViewDataSource {
             let record = trackingList.sortedRecords[indexPath.row]
             return rowHeight(byTimePeriod: record.end - record.start)
         default:
-            return rowHeight(byTimePeriod: trackingService?.timeSpan ?? 0.0)
+            let timeSpan = isBeingTracked ? trackingTimeSpan : 0.0
+            return rowHeight(byTimePeriod: timeSpan)
         }
     }
     private func rowHeight(byTimePeriod timePeriod: TimeInterval) -> CGFloat {
         guard let tbcDict = mainVC?.tbcDict else { return 0.0 }
         let tableHeight = contentView.table.bounds.height
-        let longestTime: TimeInterval = tbcDict.values.reduce(0.0) { max($0, $1.trackingList.totalLength) }
-        let maxTimePeriod: TimeInterval = 60
-        let timeScale: TimeInterval = timePeriod / min(maxTimePeriod, longestTime)
+        let defaultTableTimeSpan: TimeInterval = mainVC?.defaultTableTimeSpan ?? 10.0
+        let longestTime: TimeInterval = tbcDict.values.reduce(defaultTableTimeSpan) {
+            let finalTotalLength = $1.trackingList.totalLength + trackingTimeSpan
+            return max($0, finalTotalLength)
+        }
+        let timeScale: TimeInterval = timePeriod / longestTime
         return tableHeight * CGFloat(timeScale)
     }
 

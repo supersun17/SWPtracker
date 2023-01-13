@@ -17,6 +17,7 @@ class MainViewController: UIViewController {
     private let trackingService = TrackingService(refreshInterval: 1.0)
     @Published private(set) var tbcDict: [String: TrackingBarController] = [:]
     private var anyCancallables: Set<AnyCancellable> = []
+    let defaultTableTimeSpan: TimeInterval = 10.0
 
 
     override func loadView() {
@@ -73,6 +74,10 @@ extension MainViewController {
 	@objc
     func handleStartTap(_ sender: UIButton) {
         if trackingService.state == .active {
+            if let listName = trackingService.trackingListName {
+                tbcDict[listName]?.saveRecord(startTime: trackingService.startTime ?? 0.0,
+                                              endTime: (trackingService.startTime ?? 0.0) + (trackingService.timeSpan ?? 0.0))
+            }
             trackingService.endTracking()
         } else {
             presentStartTrackingAlert()
@@ -143,16 +148,13 @@ extension MainViewController {
         let trackingController = TrackingBarController(trackingList: trackingList, trackingService: trackingService)
         tbcDict[trackingList.listName] = trackingController
         addChild(trackingController)
-        contentView.addTrackingBar(trackingBar: trackingController.contentView)
+        trackingController.viewDidLoad()
+        contentView.barStack.addArrangedSubview(trackingController.contentView)
     }
 
     func updateUI() {
         contentView.updateUI(mmssString: trackingService.timeSpan?.toMMSSString,
                              trackingListName: trackingService.trackingListName)
-        guard let listName = trackingService.trackingListName,
-              let activeTbc = tbcDict[listName] else {
-            return
-        }
-        activeTbc.updateUI()
+        tbcDict.values.forEach { $0.updateUI() }
 	}
 }

@@ -31,6 +31,7 @@ class TrackingBar: UIView {
         return lbl
     }()
 
+
     override init(frame: CGRect = .zero) {
         super.init(frame: frame)
         setupViews()
@@ -44,6 +45,7 @@ class TrackingBar: UIView {
 
 
 private extension TrackingBar {
+
     func setupViews() {
         addSubview(table)
         addSubview(subTitle)

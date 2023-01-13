@@ -76,9 +76,6 @@ class TrackingService {
 
     func endTracking() {
         endTrackingTimer()
-//        if let listName = trackingListName {
-//            tbcDict[listName]?.saveRecord(startTime: trackingService.startTime ?? 0.0, endTime: (trackingService.startTime ?? 0.0) + timeSpanSinceTrackingStarted)
-//        }
         clear()
         state = .inactive
     }
