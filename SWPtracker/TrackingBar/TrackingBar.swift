@@ -18,6 +18,7 @@ class TrackingBar: UIView {
         tbv.separatorInset = UIEdgeInsets.zero
         tbv.backgroundColor = .secondarySystemBackground
         tbv.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+        tbv.layer.cornerRadius = 8.0
         tbv.translatesAutoresizingMaskIntoConstraints = false
         return tbv
     }()
