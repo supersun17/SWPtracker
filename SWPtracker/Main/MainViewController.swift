@@ -16,7 +16,6 @@ class MainViewController: UIViewController {
 
     private let trackingService = TrackingService(refreshInterval: 1.0)
     @Published private(set) var tbcDict: [String: TrackingBarController] = [:]
-    private var listNames: [String] = []
     private var anyCancallables: Set<AnyCancellable> = []
     let defaultTableTimeSpan: TimeInterval = 10.0
 
@@ -88,7 +87,7 @@ extension MainViewController {
     }
     private func presentStartTrackingAlert() {
         let sheet = UIAlertController()
-        for listName in listNames {
+        for listName in TrackingList.listNames {
             let action = UIAlertAction(title: listName, style: .default) { [weak trackingService] (_) in
                 trackingService?.startTracking(withTrackingListName: listName)
             }
@@ -154,7 +153,6 @@ extension MainViewController {
         if tbc.isBeingTracked {
             handleEndTap()
         }
-        listNames.removeAll { $0 == tbc.trackingList.listName }
         tbcDict[tbc.trackingList.listName] = nil
         tbc.removeFromParent()
         tbc.contentView.removeFromSuperview()
@@ -183,7 +181,6 @@ extension MainViewController {
         addChild(trackingController)
         trackingController.viewDidLoad()
         contentView.barStack.addArrangedSubview(trackingController.contentView)
-        listNames.append(trackingList.listName)
     }
 
     func updateUI() {

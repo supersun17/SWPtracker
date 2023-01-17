@@ -9,12 +9,13 @@
 import UIKit
 import CoreData
 
-public class TrackingList: NSManagedObject {
+
+class TrackingList: NSManagedObject {
 
 	@NSManaged public var listName: String!
 	@NSManaged public var listOrder: Int16
 	@NSManaged public var records: NSSet?
-    static private var listNameSet: Set<String> = []
+    static private(set) var listNames: [String] = []
     var allRecords: [TrackingRecord] { records?.allObjects as? [TrackingRecord] ?? []  }
     var sortedRecords: [TrackingRecord] { allRecords.sorted { $0.start < $1.start } }
     var numberOfRecords: Int { allRecords.count }
@@ -39,13 +40,14 @@ public class TrackingList: NSManagedObject {
 
 	static func factory(with listName: String) -> TrackingList? {
         guard !listName.isEmpty,
-              TrackingList.listNameSet.insert(listName).inserted,
-              let entity = NSEntityDescription.entity(forEntityName: String(describing: String(describing: TrackingList.self)), in: cdContext) else {
+              !Self.listNames.contains(listName),
+              let entity = NSEntityDescription.entity(forEntityName: String(describing: TrackingList.self), in: cdContext) else {
             return nil
         }
         let trackingList = TrackingList(entity: entity, insertInto: cdContext)
-        trackingList.listOrder = Int16(TrackingList.listNameSet.count - 1)
+        trackingList.listOrder = Int16(Self.listNames.count - 1)
         trackingList.listName = listName
+        Self.listNames.append(listName)
         do {
             try cdContext.save()
         } catch {
@@ -60,11 +62,11 @@ public class TrackingList: NSManagedObject {
 		var trackingLists: [TrackingList] = []
 		do {
 		    trackingLists = try cdContext.fetch(fetchRequest())
+            trackingLists.forEach { Self.listNames.append($0.listName) }
 		} catch {
 			print("TrackingLists fetching failed: \(error.localizedDescription)")
 			return []
 		}
-
 		return trackingLists
 	}
 
@@ -76,7 +78,7 @@ public class TrackingList: NSManagedObject {
         } catch {
             print("TrackingList saving failed: \(error.localizedDescription)")
         }
-        TrackingList.listNameSet.remove(listNameBeforeDeletion)
+        Self.listNames.removeAll { $0 == listNameBeforeDeletion }
     }
 }
 
