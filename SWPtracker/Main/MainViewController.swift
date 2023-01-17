@@ -105,7 +105,7 @@ extension MainViewController {
             $0.deleteAllRecords()
             $0.updateUI()
         }
-        trackingService.resetTracking()
+        trackingService.endTracking()
 	}
 
 	@objc

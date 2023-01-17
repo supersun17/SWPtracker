@@ -80,12 +80,6 @@ class TrackingService {
         state = .inactive
     }
 
-    func resetTracking() {
-        endTrackingTimer()
-        clear()
-        state = .inactive
-    }
-
     private func endTrackingTimer() {
         trackingTimer?.invalidate()
         trackingTimer = nil
