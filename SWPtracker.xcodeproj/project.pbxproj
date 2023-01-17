@@ -19,6 +19,7 @@
 		3AFB0744227F3DF300455E92 /* SWPtrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB0743227F3DF300455E92 /* SWPtrackerTests.swift */; };
 		3AFB074F227F56DA00455E92 /* TrackingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB074E227F56DA00455E92 /* TrackingService.swift */; };
 		3AFB0751227F572B00455E92 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AFB0750227F572B00455E92 /* Helpers.swift */; };
+		829653CC29768AAE00E49526 /* TrackingDataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 829653CB29768AAE00E49526 /* TrackingDataBase.swift */; };
 		82A7EE3025A2BAAC00FD5431 /* TrackingBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A7EE2F25A2BAAC00FD5431 /* TrackingBarController.swift */; };
 		82AA1482254ABB3800280B41 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AA1481254ABB3800280B41 /* MainView.swift */; };
 /* End PBXBuildFile section */
@@ -50,6 +51,7 @@
 		3AFB0745227F3DF300455E92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3AFB074E227F56DA00455E92 /* TrackingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingService.swift; sourceTree = "<group>"; };
 		3AFB0750227F572B00455E92 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		829653CB29768AAE00E49526 /* TrackingDataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingDataBase.swift; sourceTree = "<group>"; };
 		82A7EE2F25A2BAAC00FD5431 /* TrackingBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingBarController.swift; sourceTree = "<group>"; };
 		82AA1481254ABB3800280B41 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -96,6 +98,7 @@
 			children = (
 				3AFB0750227F572B00455E92 /* Helpers.swift */,
 				3AFB074E227F56DA00455E92 /* TrackingService.swift */,
+				829653CB29768AAE00E49526 /* TrackingDataBase.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 				3AFB072F227F3DF100455E92 /* AppDelegate.swift in Sources */,
 				3AFB0751227F572B00455E92 /* Helpers.swift in Sources */,
 				3AD3B2B32295D20700C1BB8D /* TrackingList.swift in Sources */,
+				829653CC29768AAE00E49526 /* TrackingDataBase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

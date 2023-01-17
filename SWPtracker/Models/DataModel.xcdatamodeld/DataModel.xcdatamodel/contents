@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21279" systemVersion="21G115" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="TrackingList" representedClassName=".TrackingList" syncable="YES">
-        <attribute name="listName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="listOrder" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="records" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TrackingRecord" inverseName="trackingList" inverseEntity="TrackingRecord" syncable="YES"/>
+        <attribute name="listName" optional="YES" attributeType="String"/>
+        <relationship name="records" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TrackingRecord" inverseName="trackingList" inverseEntity="TrackingRecord"/>
     </entity>
     <entity name="TrackingRecord" representedClassName=".TrackingRecord" syncable="YES">
-        <attribute name="end" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="label" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="start" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="trackingList" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackingList" inverseName="records" inverseEntity="TrackingList" syncable="YES"/>
+        <attribute name="end" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="label" optional="YES" attributeType="String"/>
+        <attribute name="start" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <relationship name="trackingList" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TrackingList" inverseName="records" inverseEntity="TrackingList"/>
     </entity>
-    <elements>
-        <element name="TrackingList" positionX="-599.6171875" positionY="53.6796875" width="128" height="90"/>
-        <element name="TrackingRecord" positionX="-359.15625" positionY="162.421875" width="128" height="105"/>
-    </elements>
 </model>

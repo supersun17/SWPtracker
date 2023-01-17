@@ -49,3 +49,9 @@ extension TimeInterval {
         return String(format: "%02d:%02d", minutes, seconds)
     }
 }
+
+
+extension NSManagedObject {
+
+    class var cdContext: NSManagedObjectContext { (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext }
+}

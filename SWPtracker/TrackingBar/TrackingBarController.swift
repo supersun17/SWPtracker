@@ -34,9 +34,11 @@ class TrackingBarController: UIViewController {
         UIColor(hexString: "#fb13e8"),
         UIColor(hexString: "#fb13a2")
     ]
-    weak var trackingService: TrackingService?
-    weak var mainVC: MainViewController? { parent as? MainViewController }
     private let cellID: String = "TrackingListCell"
+
+    weak var trackingService: TrackingService?
+    weak var db: TrackingDataBase?
+    weak var mainVC: MainViewController? { parent as? MainViewController }
     let trackingList: TrackingList
     var isBeingTracked: Bool {
         guard let trackingListName = trackingService?.trackingListName else { return false }
@@ -48,9 +50,10 @@ class TrackingBarController: UIViewController {
     }
 
 
-    init(trackingList: TrackingList, trackingService: TrackingService?) {
+    init(trackingList: TrackingList, trackingService: TrackingService?, db: TrackingDataBase?) {
         self.trackingList = trackingList
         self.trackingService = trackingService
+        self.db = db
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -81,18 +84,6 @@ class TrackingBarController: UIViewController {
             mainVC?.handleTableLongPress(self)
         default:
             break
-        }
-    }
-
-    func saveRecord(startTime: TimeInterval, endTime: TimeInterval) {
-        if let newRecord = TrackingRecord.factory(with: trackingList.listName, startTime, endTime) {
-            trackingList.addToRecords(newRecord)
-        }
-    }
-
-    func deleteAllRecords() {
-        if let records = trackingList.records {
-            trackingList.removeFromRecords(records)
         }
     }
 

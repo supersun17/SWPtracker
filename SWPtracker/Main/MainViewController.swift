@@ -15,6 +15,7 @@ class MainViewController: UIViewController {
     lazy var contentView: MainView = MainView()
 
     private let trackingService = TrackingService(refreshInterval: 1.0)
+    private let db = TrackingDataBase()
     @Published private(set) var tbcDict: [String: TrackingBarController] = [:]
     private var anyCancallables: Set<AnyCancellable> = []
     let defaultTableTimeSpan: TimeInterval = 10.0
@@ -79,15 +80,16 @@ extension MainViewController {
         }
 	}
     private func handleEndTap() {
-        if let listName = trackingService.trackingListName {
-            tbcDict[listName]?.saveRecord(startTime: trackingService.startTime ?? 0.0,
-                                          endTime: (trackingService.startTime ?? 0.0) + (trackingService.timeSpan ?? 0.0))
+        if let listName = trackingService.trackingListName,
+           let start = trackingService.startTime,
+           let timeSpan = trackingService.timeSpan {
+            tbcDict[listName]?.trackingList.saveRecord(startTime: start, endTime: start + timeSpan)
         }
         trackingService.endTracking()
     }
     private func presentStartTrackingAlert() {
         let sheet = UIAlertController()
-        for listName in TrackingList.listNames {
+        for listName in db.listNames {
             let action = UIAlertAction(title: listName, style: .default) { [weak trackingService] (_) in
                 trackingService?.startTracking(withTrackingListName: listName)
             }
@@ -101,7 +103,7 @@ extension MainViewController {
 	@objc
     func handleResetTap(_ sender: UIButton) {
         tbcDict.values.forEach {
-            $0.deleteAllRecords()
+            $0.trackingList.deleteAllRecords()
             $0.updateUI()
         }
         trackingService.endTracking()
@@ -120,7 +122,7 @@ extension MainViewController {
 		let confirm = UIAlertAction(title: "OK", style: .default) { [weak self] (action) in
 			if let newListName = alertController.textFields?.first?.text,
                !newListName.isEmpty {
-                guard let trackingList = TrackingList.factory(with: newListName) else { return }
+                guard let trackingList = self?.db.createList(with: newListName) else { return }
                 self?.addTrackerBarController(trackingList)
                 self?.updateUI()
 			} else {
@@ -156,7 +158,7 @@ extension MainViewController {
         tbcDict[tbc.trackingList.listName] = nil
         tbc.removeFromParent()
         tbc.contentView.removeFromSuperview()
-        tbc.trackingList.delete()
+        db.delete(tbc.trackingList)
     }
 
 	func presentError(_ message: String) {
@@ -169,14 +171,14 @@ extension MainViewController {
 extension MainViewController {
 
     func setupTrackingBars() {
-        let allList = TrackingList.fetchAllList()
+        let allList = db.fetchAllList()
         for trackingList in allList {
             addTrackerBarController(trackingList)
         }
     }
 
     func addTrackerBarController(_ trackingList: TrackingList) {
-        let trackingController = TrackingBarController(trackingList: trackingList, trackingService: trackingService)
+        let trackingController = TrackingBarController(trackingList: trackingList, trackingService: trackingService, db: db)
         tbcDict[trackingList.listName] = trackingController
         addChild(trackingController)
         trackingController.viewDidLoad()

@@ -10,6 +10,7 @@ import UIKit
 
 
 class TrackingBar: UIView {
+
     private(set) lazy var table: UITableView = {
         let tbv = UITableView()
         tbv.separatorStyle = .none

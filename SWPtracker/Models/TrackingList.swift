@@ -12,18 +12,57 @@ import CoreData
 
 class TrackingList: NSManagedObject {
 
-	@NSManaged public var listName: String!
-	@NSManaged public var listOrder: Int16
-	@NSManaged public var records: NSSet?
-    static private(set) var listNames: [String] = []
+    @NSManaged private(set) var listName: String!
+    @NSManaged private(set) var records: NSSet?
+
     var allRecords: [TrackingRecord] { records?.allObjects as? [TrackingRecord] ?? []  }
+    var numberOfRecords: Int { records?.count ?? 0 }
     var sortedRecords: [TrackingRecord] { allRecords.sorted { $0.start < $1.start } }
-    var numberOfRecords: Int { allRecords.count }
     var totalLength: TimeInterval { allRecords.reduce(0, { $0 + $1.end - $1.start }) }
 
-	@nonobjc public class func fetchRequest() -> NSFetchRequest<TrackingList> {
-		return NSFetchRequest<TrackingList>(entityName: String(describing: TrackingList.self))
-	}
+
+    convenience init?(withListName listName: String) {
+        guard !listName.isEmpty,
+              let entity = NSEntityDescription.entity(forEntityName: String(describing: TrackingList.self),
+                                                      in: Self.cdContext) else {
+            return nil
+        }
+        self.init(entity: entity, insertInto: Self.cdContext)
+        self.listName = listName
+        do {
+            try Self.cdContext.save()
+        } catch {
+            print("TrackingList saving failed: \(error.localizedDescription)")
+            return nil
+        }
+    }
+
+    func saveRecord(startTime: TimeInterval, endTime: TimeInterval) {
+        if let newRecord = TrackingRecord(withLabel: listName, start: startTime, end: endTime) {
+            addToRecords(newRecord)
+        }
+        do {
+            try Self.cdContext.save()
+        } catch {
+            print("TrackingList saving failed: \(error.localizedDescription)")
+        }
+    }
+
+    func deleteAllRecords() {
+        if let records = records {
+            removeFromRecords(records)
+        }
+        do {
+            try Self.cdContext.save()
+        } catch {
+            print("TrackingList saving failed: \(error.localizedDescription)")
+        }
+    }
+
+    @nonobjc
+    class func fetchRequest() -> NSFetchRequest<TrackingList> {
+        return NSFetchRequest<TrackingList>(entityName: String(describing: TrackingList.self))
+    }
 
     @objc(addRecordsObject:)
     @NSManaged public func addToRecords(_ value: TrackingRecord)
@@ -36,54 +75,4 @@ class TrackingList: NSManagedObject {
 
     @objc(removeRecords:)
     @NSManaged public func removeFromRecords(_ values: NSSet)
-
-
-	static func factory(with listName: String) -> TrackingList? {
-        guard !listName.isEmpty,
-              !Self.listNames.contains(listName),
-              let entity = NSEntityDescription.entity(forEntityName: String(describing: TrackingList.self), in: cdContext) else {
-            return nil
-        }
-        let trackingList = TrackingList(entity: entity, insertInto: cdContext)
-        trackingList.listOrder = Int16(Self.listNames.count - 1)
-        trackingList.listName = listName
-        Self.listNames.append(listName)
-        do {
-            try cdContext.save()
-        } catch {
-            print("TrackingList saving failed: \(error.localizedDescription)")
-            return nil
-        }
-
-        return trackingList
-	}
-
-	static func fetchAllList() -> [TrackingList] {
-		var trackingLists: [TrackingList] = []
-		do {
-		    trackingLists = try cdContext.fetch(fetchRequest())
-            trackingLists.forEach { Self.listNames.append($0.listName) }
-		} catch {
-			print("TrackingLists fetching failed: \(error.localizedDescription)")
-			return []
-		}
-		return trackingLists
-	}
-
-    func delete() {
-        let listNameBeforeDeletion = listName!
-        Self.cdContext.delete(self)
-        do {
-            try Self.cdContext.save()
-        } catch {
-            print("TrackingList saving failed: \(error.localizedDescription)")
-        }
-        Self.listNames.removeAll { $0 == listNameBeforeDeletion }
-    }
-}
-
-
-extension NSManagedObject {
-
-    static var cdContext: NSManagedObjectContext { (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext }
 }

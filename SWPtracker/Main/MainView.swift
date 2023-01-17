@@ -11,6 +11,7 @@ import UIKit
 
 
 class MainView: UIView {
+
     private var trackingListName: UILabel = {
         let l = UILabel()
         l.textAlignment = .center
@@ -63,6 +64,7 @@ class MainView: UIView {
         return b
     }()
 
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
@@ -80,12 +82,11 @@ class MainView: UIView {
     }
 
     func updateUI(mmssString: String?, trackingListName tln: String? = nil) {
-        if let hhmmString = mmssString {
+        if let hhmmString = mmssString,
+           let tln = tln {
             startBtn.setTitle("END", for: .normal)
             timeSpent.text = hhmmString
-            if let tln = tln {
-                trackingListName.text = tln
-            }
+            trackingListName.text = tln
         } else {
             startBtn.setTitle("START", for: .normal)
             timeSpent.text = "00:00"
