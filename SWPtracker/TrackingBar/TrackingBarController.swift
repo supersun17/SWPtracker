@@ -14,6 +14,12 @@ class TrackingBarController: UIViewController {
     lazy var contentView: TrackingBar = TrackingBar()
 
     let ranbowColors: [UIColor] = [
+        UIColor(hexString: "#1320fb"),
+        UIColor(hexString: "#5413fb"),
+        UIColor(hexString: "#9a13fb"),
+        UIColor(hexString: "#cf13fb"),
+        UIColor(hexString: "#fb13e8"),
+        UIColor(hexString: "#fb13a2"),
         UIColor(hexString: "#fb131b"),
         UIColor(hexString: "#fb5713"),
         UIColor(hexString: "#fba213"),
@@ -26,14 +32,8 @@ class TrackingBarController: UIViewController {
         UIColor(hexString: "#13fbf9"),
         UIColor(hexString: "#13d1fb"),
         UIColor(hexString: "#13a6fb"),
-        UIColor(hexString: "#1375fb"),
-        UIColor(hexString: "#1320fb"),
-        UIColor(hexString: "#5413fb"),
-        UIColor(hexString: "#9a13fb"),
-        UIColor(hexString: "#cf13fb"),
-        UIColor(hexString: "#fb13e8"),
-        UIColor(hexString: "#fb13a2")
-    ]
+        UIColor(hexString: "#1375fb")
+    ].reversed()
     private let cellID: String = "TrackingListCell"
 
     weak var trackingService: TrackingService?
