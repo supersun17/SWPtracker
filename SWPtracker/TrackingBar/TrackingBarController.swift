@@ -80,7 +80,7 @@ class TrackingBarController: UIViewController {
     @objc
     private func handleLongPress(_ sender: UILongPressGestureRecognizer) {
         switch sender.state {
-        case .ended:
+        case .began:
             mainVC?.handleTableLongPress(self)
         default:
             break
