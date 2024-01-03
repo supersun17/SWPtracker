@@ -32,6 +32,11 @@ class TrackingBar: UIView {
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
+    private(set) lazy var tableMask: MaskView = {
+        let mask = MaskView()
+        mask.translatesAutoresizingMaskIntoConstraints = false
+        return mask
+    }()
 
 
     override init(frame: CGRect = .zero) {
@@ -50,6 +55,7 @@ private extension TrackingBar {
 
     func setupViews() {
         addSubview(table)
+        addSubview(tableMask)
         addSubview(subTitle)
     }
 
@@ -59,6 +65,12 @@ private extension TrackingBar {
             table.topAnchor.constraint(equalTo: topAnchor),
             table.leadingAnchor.constraint(equalTo: leadingAnchor),
             table.trailingAnchor.constraint(equalTo: trailingAnchor),
+        ]
+        constraints += [
+            tableMask.heightAnchor.constraint(equalTo: table.heightAnchor, multiplier: 0.2),
+            tableMask.topAnchor.constraint(equalTo: table.topAnchor),
+            tableMask.leadingAnchor.constraint(equalTo: table.leadingAnchor),
+            tableMask.trailingAnchor.constraint(equalTo: table.trailingAnchor)
         ]
         constraints += [
             subTitle.heightAnchor.constraint(equalToConstant: 40.0),
