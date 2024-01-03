@@ -17,10 +17,8 @@ class TrackingDataBase {
 
 
     func createList(with listName: String) -> TrackingList? {
-        guard !listName.isEmpty,
-              !listNames.contains(listName) else {
-            return nil
-        }
+        guard listNames.count < 5 else { return nil }
+        guard !listName.isEmpty, !listNames.contains(listName) else { return nil }
         let trackingList = TrackingList(withListName: listName)
         do {
             try NSManagedObject.cdContext.save()
