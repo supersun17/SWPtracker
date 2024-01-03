@@ -181,8 +181,9 @@ extension MainViewController {
         let trackingController = TrackingBarController(trackingList: trackingList, trackingService: trackingService, db: db)
         tbcDict[trackingList.listName] = trackingController
         addChild(trackingController)
-        trackingController.viewDidLoad()
         contentView.barStack.addArrangedSubview(trackingController.contentView)
+        trackingController.didMove(toParent: self)
+        trackingController.viewDidLoad()
     }
 
     func updateUI() {
