@@ -123,9 +123,10 @@ extension TrackingBarController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     private func rowHeight(byTimePeriod timePeriod: TimeInterval) -> CGFloat {
-        guard let tbcDict = mainVC?.tbcDict else { return 0.0 }
+        guard let mainVC else { return 0.0 }
+        let tbcDict = mainVC.tbcDict
         let tableHeight = contentView.table.bounds.height
-        let defaultTableTimeSpan: TimeInterval = mainVC?.defaultTableTimeSpan ?? 10.0
+        let defaultTableTimeSpan: TimeInterval = mainVC.defaultTableTimeSpan
         let longestTime: TimeInterval = tbcDict.values.reduce(defaultTableTimeSpan) {
             let finalTotalLength = $1.trackingList.totalLength + $1.trackingTimeSpan
             return max($0, finalTotalLength)
