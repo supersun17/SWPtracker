@@ -89,9 +89,7 @@ class TrackingBarController: UIViewController {
 
     func updateUI() {
         contentView.table.reloadData()
-        if isBeingTracked {
-            reloadSubTitle()
-        }
+        reloadSubTitle()
     }
 
     private func reloadSubTitle() {

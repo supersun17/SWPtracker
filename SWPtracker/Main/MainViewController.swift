@@ -102,11 +102,11 @@ extension MainViewController {
 
 	@objc
     func handleResetTap(_ sender: UIButton) {
+        trackingService.endTracking()
         tbcDict.values.forEach {
             $0.trackingList.deleteAllRecords()
             $0.updateUI()
         }
-        trackingService.endTracking()
 	}
 
 	@objc
