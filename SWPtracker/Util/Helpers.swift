@@ -10,6 +10,20 @@ import UIKit
 import CoreData
 
 
+
+extension UIView {
+    var windowBounds: CGRect { window?.bounds ?? .zero }
+}
+
+
+extension NSLayoutConstraint {
+    func withPriority(_ priority: UILayoutPriority) -> NSLayoutConstraint {
+        self.priority = priority
+        return self
+    }
+}
+
+
 extension UIColor {
 	//// Copied as it is from Stack link
 	/// Not moved values to constant as it would be difficult to name them

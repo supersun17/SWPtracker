@@ -17,11 +17,16 @@ class TrackingBar: UIView {
         tbv.isScrollEnabled = false
         tbv.allowsSelection = false
         tbv.separatorInset = UIEdgeInsets.zero
-        tbv.backgroundColor = .secondarySystemBackground
+        tbv.backgroundColor = .lightGray
         tbv.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
         tbv.layer.cornerRadius = 8.0
         tbv.translatesAutoresizingMaskIntoConstraints = false
         return tbv
+    }()
+    private lazy var tableWidthConstraint: NSLayoutConstraint = {
+        return table
+            .widthAnchor.constraint(equalToConstant: windowBounds.width / 5.0)
+            .withPriority(.defaultHigh)
     }()
     private(set) lazy var subTitle: UILabel = {
         let lbl = UILabel()
@@ -48,6 +53,11 @@ class TrackingBar: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        tableWidthConstraint.isActive = true
+    }
 }
 
 
@@ -62,9 +72,10 @@ private extension TrackingBar {
     func setupConstraints() {
         var constraints: [NSLayoutConstraint] = []
         constraints += [
+            table.centerXAnchor.constraint(equalTo: centerXAnchor),
             table.topAnchor.constraint(equalTo: topAnchor),
-            table.leadingAnchor.constraint(equalTo: leadingAnchor),
-            table.trailingAnchor.constraint(equalTo: trailingAnchor),
+            table.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor),
+            table.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor)
         ]
         constraints += [
             tableMask.heightAnchor.constraint(equalTo: table.heightAnchor, multiplier: 0.2),
