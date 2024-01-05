@@ -12,7 +12,7 @@ import UIKit
 
 class MainView: UIView {
 
-    private var trackingListName: UILabel = {
+    private lazy var trackingListName: UILabel = {
         let l = UILabel()
         l.textAlignment = .center
         l.text = "NONE"
@@ -21,7 +21,7 @@ class MainView: UIView {
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
-    private var timeSpent: UILabel = {
+    private lazy var timeSpent: UILabel = {
         let l = UILabel()
         l.textAlignment = .center
         l.text = "00:00"
@@ -30,7 +30,7 @@ class MainView: UIView {
         l.translatesAutoresizingMaskIntoConstraints = false
         return l
     }()
-    private(set) var barStack: UIStackView = {
+    private(set) lazy var barStack: UIStackView = {
         let s = UIStackView()
         s.distribution = .fillEqually
         s.alignment = .fill
@@ -39,16 +39,18 @@ class MainView: UIView {
         s.translatesAutoresizingMaskIntoConstraints = false
         return s
     }()
-    private(set) var resetBtn: UIButton = {
-        let b = UIButton(type: .system)
+    private(set) lazy var resetBtn: UIButton = {
+        let b = TouchEnlargedButton(type: .system)
+        b.enlargedTouchInsets = .init(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
         b.setTitle("RESET", for: .normal)
         b.setTitleColor(#colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1), for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()
-    private(set) var startBtn: UIButton = {
+    private let startBtnLength: CGFloat = 80.0
+    private(set) lazy var startBtn: UIButton = {
         let b = UIButton(type: .system)
-        b.layer.cornerRadius = 40.0
+        b.layer.cornerRadius = startBtnLength / 2.0
         b.setTitle("START", for: .normal)
         b.setTitleColor(.white, for: .normal)
         b.setTitleColor(.gray, for: .disabled)
@@ -57,7 +59,8 @@ class MainView: UIView {
         return b
     }()
     private(set) var addBtn: UIButton = {
-        let b = UIButton(type: .system)
+        let b = TouchEnlargedButton(type: .system)
+        b.enlargedTouchInsets = .init(top: 8.0, left: 8.0, bottom: 8.0, right: 8.0)
         b.setTitle("ADD", for: .normal)
         b.setTitleColor(#colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 1), for: .normal)
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -131,8 +134,8 @@ private extension MainView {
         ]
         constraints += [
             startBtn.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor),
-            startBtn.heightAnchor.constraint(equalToConstant: 80.0),
-            startBtn.widthAnchor.constraint(equalToConstant: 80.0),
+            startBtn.heightAnchor.constraint(equalToConstant: startBtnLength),
+            startBtn.widthAnchor.constraint(equalToConstant: startBtnLength),
             startBtn.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -1.0 * 25.0),
         ]
         constraints += [

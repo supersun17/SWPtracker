@@ -23,6 +23,7 @@
 		82A7EE3025A2BAAC00FD5431 /* TrackingBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A7EE2F25A2BAAC00FD5431 /* TrackingBarController.swift */; };
 		82AA1482254ABB3800280B41 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82AA1481254ABB3800280B41 /* MainView.swift */; };
 		82B32D932B4560BB002A0E89 /* MaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B32D922B4560BB002A0E89 /* MaskView.swift */; };
+		82B32D952B47E0D0002A0E89 /* TouchEnlargedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B32D942B47E0D0002A0E89 /* TouchEnlargedButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		82A7EE2F25A2BAAC00FD5431 /* TrackingBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingBarController.swift; sourceTree = "<group>"; };
 		82AA1481254ABB3800280B41 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		82B32D922B4560BB002A0E89 /* MaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaskView.swift; sourceTree = "<group>"; };
+		82B32D942B47E0D0002A0E89 /* TouchEnlargedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchEnlargedButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				82B32D922B4560BB002A0E89 /* MaskView.swift */,
 				3AFB074E227F56DA00455E92 /* TrackingService.swift */,
 				829653CB29768AAE00E49526 /* TrackingDataBase.swift */,
+				82B32D942B47E0D0002A0E89 /* TouchEnlargedButton.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -276,6 +279,7 @@
 				3AD3B2BA2295D70900C1BB8D /* TrackingBar.swift in Sources */,
 				3AD3B2B62295D4E100C1BB8D /* TrackingRecord.swift in Sources */,
 				3AFB074F227F56DA00455E92 /* TrackingService.swift in Sources */,
+				82B32D952B47E0D0002A0E89 /* TouchEnlargedButton.swift in Sources */,
 				3AFB072F227F3DF100455E92 /* AppDelegate.swift in Sources */,
 				82B32D932B4560BB002A0E89 /* MaskView.swift in Sources */,
 				3AFB0751227F572B00455E92 /* Helpers.swift in Sources */,
